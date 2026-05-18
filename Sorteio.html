@@ -507,12 +507,12 @@
         <div class="input-grid">
             <div class="input-group">
                 <label for="totalNumeros">Quantidades de Números do Sorteio</label>
-                <input type="number" id="totalNumeros" min="1" placeholder="Ex: 100">
+                <input type="number" id="totalNumeros" min="1" placeholder="Ex: 984">
             </div>
 
             <div class="input-group">
                 <label for="qtdSortear">Quantidades de Números a Sortear</label>
-                <input type="number" id="qtdSortear" min="1" placeholder="Ex: 1">
+                <input type="number" id="qtdSortear" min="1" placeholder="Ex: 2">
             </div>
         </div>
 
@@ -566,12 +566,35 @@
                 
             </p>
             <p style="margin-top: 8px; font-size: 0.85rem; color: #6b46c1;">
-                📱 Fiquem tranquilos! Iremos contatar todos os participantes pelo WhatsApp informando o horário exato em que o sorteio vai acontecer para que todos fiquem bem informados.
+                📱 Fiquem tranquilos! 📱<br>
+                Se você for o GANHADOR nós iremos contatar pelo seu WhatsApp no exato momento.
             </p>
+            <hr style="color: red; margin: 20px;">
+            <a href="https://wa.me/5562995679219"><button style="
+    position: relative;
+    padding: 16px 40px;
+    margin: 20px;                                                  
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #25d366, #128c7e, #075e54, #25d366);
+    background-size: 400%;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+" 
+onmouseover="this.style.transform='scale(1.05)'" 
+onmouseout="this.style.transform='scale(1)'" 
+onmousedown="this.style.transform='scale(0.98)'" 
+onmouseup="this.style.transform='scale(1.05)'">
+    Quero Criar Meu Site
+</button></a>
         </div>
 
         <button class="btn-admin" onclick="solicitarSenhaAdmin()">🛡️ Painel Admin</button>
-    </div>
 
     <div class="modal-admin" id="modalAvisoLista">
         <div class="modal-content card-aviso">
