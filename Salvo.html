@@ -174,7 +174,7 @@
         .then(() => {
             msgDiv.style.display = "block";
             setTimeout(() => { msgDiv.style.display = "none"; }, 2000);
-            atualizarTabelaComDados(); // Atualiza a tabela após o envio
+            atualizarTabelaComDados();
             iniciarContagemBloqueio();
         })
         .finally(() => { btnEnviar.innerText = "Enviar Dados"; });
@@ -222,7 +222,7 @@
 
     const tbody = document.querySelector("#tabelaPlanilha tbody");
     for (let i = 1; i <= 1000; i++) {
-        tbody.innerHTML += `<tr id="linha${i}"><td>${i}</td><td class="conteudo">Carregando...</td></tr>`;
+        tbody.innerHTML += `<tr id="linha${i}"><td>${i}</td><td class="conteudo">-</td></tr>`;
     }
 
     async function atualizarTabelaComDados() {
@@ -231,18 +231,23 @@
             const resposta = await fetch(URL_CSV);
             const dados = await resposta.text();
             const linhas = dados.split('\n');
-            cachePlanilha = [];
-            for (let i = 0; i < 1000; i++) {
-                let linhaTabela = document.getElementById(`linha${i + 1}`);
-                let conteudo = "-"; 
-                if (linhas[i]) {
-                    let valorDaLinha = linhas[i].split(',')[0];
-                    if (valorDaLinha && valorDaLinha.trim() !== "") {
-                        conteudo = valorDaLinha;
+            cachePlanilha = new Array(1000).fill("-");
+            
+            // Corrige o mapeamento: espera que a planilha tenha o número na coluna A
+            // e atribui corretamente ao índice da tabela
+            linhas.forEach(linha => {
+                const colunas = linha.split(',');
+                if (colunas.length > 0) {
+                    const numero = parseInt(colunas[0]);
+                    if (!isNaN(numero) && numero >= 1 && numero <= 1000) {
+                        cachePlanilha[numero - 1] = colunas[0];
                     }
                 }
-                cachePlanilha[i] = conteudo;
-                if(linhaTabela) linhaTabela.querySelector('.conteudo').innerText = conteudo;
+            });
+
+            for (let i = 0; i < 1000; i++) {
+                let linhaTabela = document.getElementById(`linha${i + 1}`);
+                if(linhaTabela) linhaTabela.querySelector('.conteudo').innerText = cachePlanilha[i];
             }
         } catch (erro) {
             console.error("Erro ao carregar planilha:", erro);
