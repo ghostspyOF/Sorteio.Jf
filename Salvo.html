@@ -122,7 +122,7 @@
 
     // Bloqueia caracteres não numéricos
     campoC.addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-6]/g, '');
+        this.value = this.value.replace(/[^0-9]/g, '');
     });
 
     function iniciarCarregamento() {
@@ -136,7 +136,7 @@
                 clearInterval(interval);
                 cardCarregando.style.display = "none";
             }
-        }, 600);
+        }, 1000);
     }
 
     function enviarParaPlanilha() {
