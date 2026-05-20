@@ -29,11 +29,11 @@
         #modalLogin { display: flex; align-items: center; justify-content: center; background-color: rgba(0,0,0,0.8); }
         .login-box { background: white; padding: 20px; border-radius: 8px; width: 300px; }
         
-        #mensagem, #alertaDuplicado, #cardCarregando { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4000; padding: 20px 40px; border-radius: 8px; font-weight: bold; display: none; text-align: center; }
+        #mensagem, #alertaDuplicado, #cardCarregando, #alertaAtualizar { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4000; padding: 20px 40px; border-radius: 8px; font-weight: bold; display: none; text-align: center; }
         #mensagem { background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
         
         /* Alerta e Carregamento Customizado */
-        #alertaDuplicado, #cardCarregando { background-color: #fff; border: 2px solid #ff9800; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 350px; padding: 20px; z-index: 5000; }
+        #alertaDuplicado, #cardCarregando, #alertaAtualizar { background-color: #fff; border: 2px solid #ff9800; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 350px; padding: 20px; z-index: 5000; }
         .btn-alerta { margin-top: 10px; padding: 8px; border: none; border-radius: 4px; cursor: pointer; color: white; }
     </style>
 </head>
@@ -52,7 +52,7 @@
     <h2>Registro de Ordem</h2>
     <form id="meuFormulario">
         <div class="form-group"><label for="campoB">Nome e WhatsApp:</label><input type="text" id="campoB" required placeholder="Ex.: Mayckon: 62995679219"></div>
-        <div class="form-group"><label for="campoC">Número do Sorteio</label><input type="text" id="campoC" required placeholder="Ex.: 100"></div>
+        <div class="form-group"><label for="campoC">Número do Sorteio</label><input type="text" id="campoC" required placeholder="Ex.: 123"></div>
         <div class="checkbox-container">
             <input type="checkbox" id="campoF"><label for="campoF">EXCLUIR</label>
             <input type="checkbox" id="campoE" style="accent-color: green; margin-left: 20px;"><label for="campoE">PAGO</label>
@@ -66,7 +66,13 @@
 
 <div id="cardCarregando">
     <p style="color: #333;">Enviando, aguarde...</p>
-    <h2 id="contador">10</h2>
+    <h2 id="contador">3</h2>
+</div>
+
+<!-- Modal de Alerta Atualizar -->
+<div id="alertaAtualizar">
+    <p style="margin-bottom: 15px; color: #28a745;">Dados enviados com sucesso!</p>
+    <button class="btn-alerta" id="btnAtualizarPagina" style="background-color: #28a745; width: 100%;">ATUALIZAR PLANILHA</button>
 </div>
 
 <!-- Modal de Alerta Customizado -->
@@ -94,7 +100,6 @@
 </div>
 
 <script>
-    // Login Lógica
     if (localStorage.getItem('autenticado') === 'true') {
         document.getElementById('modalLogin').style.display = 'none';
     }
@@ -114,36 +119,58 @@
     const campoF = document.getElementById('campoF');
     const campoE = document.getElementById('campoE');
     const btnEnviar = document.getElementById('btnEnviar');
-    const msgDiv = document.getElementById('mensagem');
     const alertaDiv = document.getElementById('alertaDuplicado');
     const cardCarregando = document.getElementById('cardCarregando');
     const contadorElement = document.getElementById('contador');
+    const alertaAtualizar = document.getElementById('alertaAtualizar');
     let cachePlanilha = [];
+    let timeoutVerificacao;
 
-    // Bloqueia caracteres não numéricos
+    campoF.addEventListener('change', () => { if(campoF.checked) campoE.checked = false; });
+    campoE.addEventListener('change', () => { if(campoE.checked) campoF.checked = false; });
+
     campoC.addEventListener('input', function() {
         this.value = this.value.replace(/[^0-9]/g, '');
+        clearTimeout(timeoutVerificacao);
+        
+        const num = parseInt(this.value);
+        if (num > 0 && num <= 1000) {
+            timeoutVerificacao = setTimeout(() => {
+                const ocupado = cachePlanilha[num - 1];
+                if(ocupado && ocupado !== "-") {
+                    document.getElementById('infoOcupado').innerText = "Registro existente: " + ocupado;
+                    alertaDiv.style.display = "block";
+                }
+            }, 500); 
+        }
     });
 
     function iniciarCarregamento() {
         cardCarregando.style.display = "block";
-        let tempo = 10;
+        let tempo = 3;
         contadorElement.innerText = tempo;
+        btnEnviar.disabled = true;
         let interval = setInterval(() => {
             tempo--;
             contadorElement.innerText = tempo;
             if(tempo <= 0) {
                 clearInterval(interval);
                 cardCarregando.style.display = "none";
+                alertaAtualizar.style.display = "block";
             }
         }, 1000);
     }
 
+    document.getElementById('btnAtualizarPagina').onclick = async () => {
+        btnAtualizarPagina.innerText = "Atualizando...";
+        btnAtualizarPagina.disabled = true;
+        await atualizarTabelaComDados();
+        location.reload();
+    };
+
     function enviarParaPlanilha() {
-        btnEnviar.disabled = true;
         btnEnviar.innerText = "Enviando...";
         alertaDiv.style.display = "none";
-        
         iniciarCarregamento();
         
         const valorFinal = campoC.value + "- " + campoB.value;
@@ -156,14 +183,15 @@
         formData.append('entry.904132235', campoE.checked ? 'PAGO' : '');
 
         fetch(URL_FORM, { method: 'POST', mode: 'no-cors', body: formData })
-        .then(() => {
-            msgDiv.style.display = "block";
-            setTimeout(() => { msgDiv.style.display = "none"; }, 2000);
-        })
-        .finally(() => { btnEnviar.disabled = false; btnEnviar.innerText = "Enviar Dados"; });
+        .then(() => { })
+        .finally(() => { btnEnviar.innerText = "Enviar Dados"; });
     }
 
-    document.getElementById('btnCancelar').onclick = () => { alertaDiv.style.display = "none"; };
+    document.getElementById('btnCancelar').onclick = () => { 
+        alertaDiv.style.display = "none"; 
+        campoC.value = "";
+    };
+    
     document.getElementById('btnForcar').onclick = enviarParaPlanilha;
 
     function salvarDados() {
@@ -188,7 +216,6 @@
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        
         const num = campoC.value;
         const ocupado = cachePlanilha[parseInt(num) - 1];
         
@@ -212,7 +239,6 @@
             const dados = await resposta.text();
             const linhas = dados.split('\n');
             cachePlanilha = [];
-            
             for (let i = 0; i < 1000; i++) {
                 let linhaTabela = document.getElementById(`linha${i + 1}`);
                 let conteudo = "-"; 
@@ -255,4 +281,5 @@
 
 </body>
 </html>
+
 
