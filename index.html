@@ -528,27 +528,29 @@
             border-radius: 2px;
         }
 
-        .menu-links {
-            display: none;
+                .menu-links {
+            display: none; /* Inicia escondido */
             position: absolute;
             right: 0;
-            top: 40px;
-            background: #fff;
+            top: 55px; /* Ajuste para ficar logo abaixo da barra fixa */
+            background: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            padding: 10px;
-            z-index: 999;
-            width: 150px;
+            padding: 15px;
+            z-index: 9999;
+            width: 200px;
+            flex-direction: column;
+            align-items: center; /* Centraliza os botões */
+            gap: 10px;
         }
 
         .menu-links a {
-            display: block;
-            color: #0d3b66;
-            padding: 8px;
             text-decoration: none;
-            font-weight: bold;
-            border-bottom: 1px solid #eee;
+            width: 100%;
+            display: flex;
+            justify-content: center; /* Centraliza o botão dentro da âncora */
         }
+
 
         
     </style>
@@ -845,6 +847,18 @@ onmouseup="this.style.transform='scale(1.05)'">
     </div>
 
     <script>
+        //Função do top
+                function toggleMenu() {
+            var menu = document.getElementById("menuLinks");
+            if (menu.style.display === "block") {
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "block";
+            }
+                }
+        
+
+        
         // Estrutura para armazenar os dados dos compradores por número
         let reservas = JSON.parse(localStorage.getItem('rifa_reservas')) || {};
         // Guarda os dados do primeiro cadastro de forma fixa no dispositivo
