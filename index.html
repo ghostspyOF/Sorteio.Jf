@@ -1,10 +1,12 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rifa V2.0</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Sorteio.Jf</title>
     <style>
         * {
             box-sizing: border-box;
@@ -479,7 +481,7 @@
                 .top-brand-bar {
             background: linear-gradient(135deg, #0d3b66, #1a5c96);
             padding: 10px 20px;
-            border-bottom: 3px solid #d1a153;
+            border-bottom: 3px solid #E3D405;
             border-radius: 0 0 20px 20px;
             display: flex;
             align-items: center;
@@ -494,9 +496,10 @@
         }
 
         .brand-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            width: 100px;
+            height: 40px;
+            border-radius: 0 20px 0 20px;
+            border: none;
             border: 2px solid #fff;
             object-fit: cover;
         }
@@ -524,7 +527,7 @@
         .hamburger span {
             width: 30px;
             height: 3px;
-            background: #fff;
+            background: #179632;
             border-radius: 2px;
         }
 
@@ -532,13 +535,13 @@
             display: none; /* Inicia escondido */
             position: absolute;
             right: 0;
-            top: 55px; /* Ajuste para ficar logo abaixo da barra fixa */
-            background: #ffffff;
-            border-radius: 8px;
+            top: 23px; /* Ajuste para ficar logo abaixo da barra fixa */
+            background: #081A59;
+            border-radius: 3px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            padding: 15px;
+            padding: 5px;
             z-index: 9999;
-            width: 210px;
+            width: 190px;
             flex-direction: column;
             align-items: center; /* Centraliza os botões */
             gap: 10px;
@@ -561,7 +564,12 @@
         <header>
              <div class="top-brand-bar">
         <img src="logo.png" alt="Quark" class="brand-img">
-        <span class="brand-name">Quark</span>
+        <span class="brand-name" style="font-size: 20px;">
+            <span class="material-icons">sports_soccer</span>
+            PRÊMIO FÁCIL
+            <span class="material-icons">emoji_events</span><br>
+            
+        </span>
         
         <div class="menu-container">
             <div class="hamburger" onclick="toggleMenu()">
@@ -570,20 +578,22 @@
                 <span></span>
             </div>
             <div class="menu-links" id="menuLinks">
-                <a href="Salvo.html"><button style="font-size: 9px; margin: 3px;" class="btn-admin">
-                ADMIN🧑‍💻
-                </button></a>
-                 <a href="https://wa.me/5562995679219"><button style="font-size: 9px; margin: 3px;" class="btn-admin">
-                CRIAR MEU SITE
-                </button></a>
-                <a href="Ajuda.html"><button style="font-size: 9px; margin: 3px;" class="btn-admin">
-                COMO SERÁ O SORTEIO
-                </button></a>
-                <a href="Sobre.html"><button style="font-size: 13px; margin: 3px;" class="btn-admin">
-                SOBRE
-                </button></a>
-                <a href="Ajuda.html"><button style="font-size: 13px; margin: 3px;" class="btn-admin">
-                AJUDA
+                <a href="Salvo.html"><button style="font-size: 15px; margin: 3px; background: none; color: #D4AF37;" class="btn-admin">
+                ADMIN<span class="material-icons">settings</span>
+                </button></a><hr style="border: none; height: 2px; background: linear-gradient(to right, transparent, #D4AF37, transparent);">
+                 <a href="https://wa.me/5562995679219"><button style="font-size: 15px; margin: 3px; background: none; color: #D4AF37;" class="btn-admin">
+                CRIAR MEU SITE<span class="material-icons">add_box</span>
+                </button></a><hr style="border: none; height: 2px; background: linear-gradient(to right, transparent, #D4AF37, transparent);">
+                <a href="Ajuda.html"><button style="font-size: 13px; margin: 3px; background: none; color: #D4AF37;" class="btn-admin">
+                <span class="material-icons">play_circle_outline</span>
+                    COMO SERÁ O SORTEIO<span class="material-icons">list_alt</span>
+                    
+                </button></a><hr style="border: none; height: 2px; background: linear-gradient(to right, transparent, #D4AF37, transparent);">
+                <a href="Sobre.html"><button style="font-size: 15px; margin: 3px; background: none; color: #D4AF37;" class="btn-admin">
+                SOBRE<span class="material-icons">info</span>
+                </button></a><hr style="border: none; height: 2px; background: linear-gradient(to right, transparent, #D4AF37, transparent);">
+                <a href="Ajuda.html"><button style="font-size: 15px; margin: 3px; background: none; color: #D4AF37;" class="btn-admin">
+                AJUDA<span class="material-icons">help</span>
                 </button></a>
             </div>
         </div>
@@ -715,7 +725,7 @@ cada um. Muito obrigado por fazerem a diferença e por caminharem conosco pelo b
             </a>
             </p>
             </div>
-            <
+            
    <a href="https://wa.me/5562995679219"><button style="
     position: relative;
     padding: 16px 40px;
