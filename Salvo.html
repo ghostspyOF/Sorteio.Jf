@@ -30,11 +30,11 @@
         #modalLogin { display: flex; align-items: center; justify-content: center; background-color: rgba(0,0,0,0.8); }
         .login-box { background: white; padding: 20px; border-radius: 8px; width: 300px; }
         
-        #mensagem, #alertaDuplicado, #cardCarregando, #alertaAtualizar { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4000; padding: 20px 40px; border-radius: 8px; font-weight: bold; display: none; text-align: center; }
+        #mensagem, #alertaDuplicado, #cardCarregando { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4000; padding: 20px 40px; border-radius: 8px; font-weight: bold; display: none; text-align: center; }
         #mensagem { background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
         
         /* Alerta e Carregamento Customizado */
-        #alertaDuplicado, #cardCarregando, #alertaAtualizar { background-color: #fff; border: 2px solid #ff9800; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 350px; padding: 20px; z-index: 5000; }
+        #alertaDuplicado, #cardCarregando { background-color: #fff; border: 2px solid #ff9800; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 350px; padding: 20px; z-index: 5000; }
         .btn-alerta { margin-top: 10px; padding: 8px; border: none; border-radius: 4px; cursor: pointer; color: white; }
     </style>
 </head>
@@ -67,12 +67,7 @@
 
 <div id="cardCarregando">
     <p style="color: #333;">Enviando, aguarde...</p>
-</div>
-
-<!-- Modal de Alerta Atualizar -->
-<div id="alertaAtualizar">
-    <p style="margin-bottom: 15px; color: #28a745;">Dados enviados com sucesso!</p>
-    <button class="btn-alerta" id="btnAtualizarPagina" style="background-color: #28a745; width: 100%;">ATUALIZAR PLANILHA</button>
+    <h2 id="contador">6</h2>
 </div>
 
 <!-- Modal de Alerta Customizado -->
@@ -119,22 +114,23 @@
     const campoF = document.getElementById('campoF');
     const campoE = document.getElementById('campoE');
     const btnEnviar = document.getElementById('btnEnviar');
+    const msgDiv = document.getElementById('mensagem');
     const alertaDiv = document.getElementById('alertaDuplicado');
     const cardCarregando = document.getElementById('cardCarregando');
-    const alertaAtualizar = document.getElementById('alertaAtualizar');
+    const contadorElement = document.getElementById('contador');
     let cachePlanilha = [];
-    let timeoutVerificacao;
+    let timeoutVerificacao; // Adicionado para controlar o tempo de digitação
 
     campoF.addEventListener('change', () => { if(campoF.checked) campoE.checked = false; });
     campoE.addEventListener('change', () => { if(campoE.checked) campoF.checked = false; });
 
     campoC.addEventListener('input', function() {
         this.value = this.value.replace(/[^0-9]/g, '');
-        clearTimeout(timeoutVerificacao);
+        clearTimeout(timeoutVerificacao); // Limpa o timer anterior
         
         const num = parseInt(this.value);
         if (num > 0 && num <= 1000) {
-            timeoutVerificacao = setTimeout(() => {
+            timeoutVerificacao = setTimeout(() => { // Aguarda 500ms para verificar
                 const ocupado = cachePlanilha[num - 1];
                 if(ocupado && ocupado !== "-") {
                     document.getElementById('infoOcupado').innerText = "Registro existente: " + ocupado;
@@ -146,12 +142,19 @@
 
     function iniciarCarregamento() {
         cardCarregando.style.display = "block";
+        let tempo = 6;
+        contadorElement.innerText = tempo;
         btnEnviar.disabled = true;
+        let interval = setInterval(() => {
+            tempo--;
+            contadorElement.innerText = tempo;
+            if(tempo <= 0) {
+                clearInterval(interval);
+                cardCarregando.style.display = "none";
+                btnEnviar.disabled = false;
+            }
+        }, 1000);
     }
-
-    document.getElementById('btnAtualizarPagina').onclick = () => {
-        location.reload();
-    };
 
     function enviarParaPlanilha() {
         btnEnviar.innerText = "Enviando...";
@@ -169,7 +172,8 @@
 
         fetch(URL_FORM, { method: 'POST', mode: 'no-cors', body: formData })
         .then(() => {
-            location.reload();
+            msgDiv.style.display = "block";
+            setTimeout(() => { msgDiv.style.display = "none"; }, 2000);
         })
         .finally(() => { btnEnviar.innerText = "Enviar Dados"; });
     }
@@ -216,7 +220,7 @@
 
     const tbody = document.querySelector("#tabelaPlanilha tbody");
     for (let i = 1; i <= 1000; i++) {
-        tbody.innerHTML += `<tr id="linha${i}"><td>${i}</td><td class="conteudo">...</td></tr>`;
+        tbody.innerHTML += `<tr id="linha${i}"><td>${i}</td><td class="conteudo">Carregando...</td></tr>`;
     }
 
     async function atualizarTabelaComDados() {
@@ -262,8 +266,10 @@
 
     document.getElementById("btnVisualizar").onclick = () => {
         document.getElementById("meuModal").style.display = "block";
+        atualizarTabelaComDados();
     };
 </script>
 
 </body>
 </html>
+
