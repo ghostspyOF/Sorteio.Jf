@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -31,7 +30,12 @@
         #modalLogin { display: flex; align-items: center; justify-content: center; background-color: rgba(0,0,0,0.8); }
         .login-box { background: white; padding: 20px; border-radius: 8px; width: 300px; }
         
-        #mensagem { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4000; padding: 20px 40px; border-radius: 8px; font-weight: bold; display: none; background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+        #mensagem, #alertaDuplicado { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4000; padding: 20px 40px; border-radius: 8px; font-weight: bold; display: none; text-align: center; }
+        #mensagem { background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+        
+        /* Alerta Customizado */
+        #alertaDuplicado { background-color: #fff; border: 2px solid #ff9800; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 350px; padding: 20px; z-index: 5000; }
+        .btn-alerta { margin-top: 10px; padding: 8px; border: none; border-radius: 4px; cursor: pointer; color: white; }
     </style>
 </head>
 <body>
@@ -49,7 +53,7 @@
     <h2>Registro de Ordem</h2>
     <form id="meuFormulario">
         <div class="form-group"><label for="campoB">Nome e WhatsApp:</label><input type="text" id="campoB" required placeholder="Ex.: Mayckon: 62995679219"></div>
-        <div class="form-group"><label for="campoC">Número do Sorteio</label><input type="text" id="campoC" required placeholder="Ex.: 1, 2, 3..."></div>
+        <div class="form-group"><label for="campoC">Número do Sorteio</label><input type="text" id="campoC" required placeholder="Ex.: 123"></div>
         <div class="checkbox-container">
             <input type="checkbox" id="campoF"><label for="campoF">EXCLUIR</label>
             <input type="checkbox" id="campoE" style="accent-color: green; margin-left: 20px;"><label for="campoE">PAGO</label>
@@ -60,6 +64,14 @@
 </div>
 
 <div id="mensagem">Enviado com sucesso!</div>
+
+<!-- Modal de Alerta Customizado -->
+<div id="alertaDuplicado">
+    <p style="margin-bottom: 15px; color: #d9534f;">Atenção! Este número já está ocupado.</p>
+    <div id="infoOcupado" style="font-size: 14px; margin-bottom: 15px; background: #fdf7f7; padding: 10px;"></div>
+    <button class="btn-alerta" id="btnCancelar" style="background-color: #6c757d; width: 45%;">Cancelar</button>
+    <button class="btn-alerta" id="btnForcar" style="background-color: #d9534f; width: 45%;">Forçar Envio</button>
+</div>
 
 <div id="meuModal" class="modal">
     <div class="modal-content">
@@ -99,30 +111,34 @@
     const campoE = document.getElementById('campoE');
     const btnEnviar = document.getElementById('btnEnviar');
     const msgDiv = document.getElementById('mensagem');
+    const alertaDiv = document.getElementById('alertaDuplicado');
+    let cachePlanilha = [];
 
-    function salvarDados() {
-        localStorage.setItem('salvo_campoB', campoB.value);
-        localStorage.setItem('salvo_campoC', campoC.value);
-        localStorage.setItem('salvo_campoF', campoF.checked);
-        localStorage.setItem('salvo_campoE', campoE.checked);
+    // Bloqueia caracteres não numéricos
+    campoC.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    function iniciarContagem() {
+        btnEnviar.disabled = true;
+        let tempo = 10;
+        let originalText = btnEnviar.innerText;
+        
+        let intervalo = setInterval(() => {
+            tempo--;
+            btnEnviar.innerText = "Aguarde " + tempo + "s...";
+            if (tempo <= 0) {
+                clearInterval(intervalo);
+                btnEnviar.disabled = false;
+                btnEnviar.innerText = originalText;
+            }
+        }, 1000);
     }
 
-    function carregarDados() {
-        campoB.value = localStorage.getItem('salvo_campoB') || '';
-        campoC.value = localStorage.getItem('salvo_campoC') || '';
-        campoF.checked = localStorage.getItem('salvo_campoF') === 'true';
-        campoE.checked = localStorage.getItem('salvo_campoE') === 'true';
-        campoB.required = !campoF.checked;
-    }
-
-    carregarDados();
-    [campoB, campoC, campoF, campoE].forEach(el => el.addEventListener('input', salvarDados));
-    campoF.addEventListener('change', () => { campoB.required = !campoF.checked; salvarDados(); });
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+    function enviarParaPlanilha() {
         btnEnviar.disabled = true;
         btnEnviar.innerText = "Enviando...";
+        alertaDiv.style.display = "none";
         
         const valorFinal = campoC.value + "- " + campoB.value;
         const URL_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSdUoZRuvriHe0ckcFqiiP21IpPUiWwCXDj6v-kjSFBwVxTBPQ/formResponse";
@@ -137,12 +153,52 @@
         .then(() => {
             msgDiv.style.display = "block";
             setTimeout(() => { msgDiv.style.display = "none"; }, 2000);
+            iniciarContagem();
         })
-        .finally(() => { btnEnviar.disabled = false; btnEnviar.innerText = "Enviar Dados"; });
+        .catch(() => {
+            btnEnviar.disabled = false;
+            btnEnviar.innerText = "Enviar Dados";
+        });
+    }
+
+    document.getElementById('btnCancelar').onclick = () => { alertaDiv.style.display = "none"; };
+    document.getElementById('btnForcar').onclick = enviarParaPlanilha;
+
+    function salvarDados() {
+        localStorage.setItem('salvo_campoB', campoB.value);
+        localStorage.setItem('salvo_campoC', campoC.value);
+        localStorage.setItem('salvo_campoF', campoF.checked);
+        localStorage.setItem('salvo_campoE', campoE.checked);
+    }
+
+    function carregarDados() {
+        campoB.value = localStorage.getItem('salvo_campoB') || '';
+        campoC.value = localStorage.getItem('salvo_campoC') || '';
+        campoF.checked = localStorage.getItem('salvo_campoF') === 'true';
+        campoE.checked = localStorage.getItem('salvo_campoE') === 'true';
+        campoB.required = !campoF.checked;
+        atualizarTabelaComDados();
+    }
+
+    carregarDados();
+    [campoB, campoC, campoF, campoE].forEach(el => el.addEventListener('input', salvarDados));
+    campoF.addEventListener('change', () => { campoB.required = !campoF.checked; salvarDados(); });
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const num = campoC.value;
+        const ocupado = cachePlanilha[parseInt(num) - 1];
+        
+        if(ocupado && ocupado !== "-") {
+            document.getElementById('infoOcupado').innerText = "Registro existente: " + ocupado;
+            alertaDiv.style.display = "block";
+        } else {
+            enviarParaPlanilha();
+        }
     });
 
     const tbody = document.querySelector("#tabelaPlanilha tbody");
-    
     for (let i = 1; i <= 1000; i++) {
         tbody.innerHTML += `<tr id="linha${i}"><td>${i}</td><td class="conteudo">Carregando...</td></tr>`;
     }
@@ -153,26 +209,25 @@
             const resposta = await fetch(URL_CSV);
             const dados = await resposta.text();
             const linhas = dados.split('\n');
+            cachePlanilha = [];
             
             for (let i = 0; i < 1000; i++) {
                 let linhaTabela = document.getElementById(`linha${i + 1}`);
-                if (linhaTabela) {
-                    let conteudo = "-"; 
-                    if (linhas[i]) {
-                        let valorDaLinha = linhas[i].split(',')[0];
-                        if (valorDaLinha && valorDaLinha.trim() !== "") {
-                            conteudo = valorDaLinha;
-                        }
+                let conteudo = "-"; 
+                if (linhas[i]) {
+                    let valorDaLinha = linhas[i].split(',')[0];
+                    if (valorDaLinha && valorDaLinha.trim() !== "") {
+                        conteudo = valorDaLinha;
                     }
-                    linhaTabela.querySelector('.conteudo').innerText = conteudo;
                 }
+                cachePlanilha[i] = conteudo;
+                if(linhaTabela) linhaTabela.querySelector('.conteudo').innerText = conteudo;
             }
         } catch (erro) {
             console.error("Erro ao carregar planilha:", erro);
         }
     }
 
-    // Lógica de pesquisa com atraso para não travar
     let timeoutPesquisa;
     document.getElementById('pesquisa').addEventListener('input', function() {
         clearTimeout(timeoutPesquisa);
@@ -181,7 +236,7 @@
             document.querySelectorAll('#tabelaPlanilha tbody tr').forEach(tr => {
                 tr.style.display = tr.innerText.toLowerCase().includes(termo) ? '' : 'none';
             });
-        }, 300); // Aguarda 300ms após parar de digitar
+        }, 300);
     });
 
     document.getElementById('btnCopiar').addEventListener('click', function() {
