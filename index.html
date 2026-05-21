@@ -902,20 +902,41 @@ onmouseup="this.style.transform='scale(1.05)'">
     </div>
 
     <!-- Modal Cadastro / Admin -->
+       
     <div class="modal-overlay" id="modalCadastro">
-        <div class="modal-content">
-            <div class="modal-title" id="modalCadastroTitulo">Dados do Comprador - Número <span id="numSelecionadoTitulo">0</span></div>
+        <div class="modal-content">                    
+            <div class="modal-title" id="modalCadastroTitulo">Dados do Comprador </div>
+            
+            <div><div class="bilhete-container" style="background-color: #fff9db; border-left: 5px solid #fab005; padding: 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-family: sans-serif; max-width: 500px; margin: 20px auto; color: #2b2b2b;">
+    <p style="margin: 0; line-height: 1.5; font-size: 16px;">
+     
+    <div class="aviso-sorteio" style="background-color: #e8f5e9; border-left: 5px solid #2e7d32; padding: 15px; border-radius: 8px; font-family: sans-serif; max-width: 500px; margin: 20px auto; color: #1b5e20;">
+        <p>Número Escolido:
+        <strong><span id="numSelecionadoTitulo" style="color: red;">00</span><strong>
+        </p>
+    </div>
+            
+    </p>
+    <p style="text-align: center; margin: 10px 0 0 0; font-size: 20px;">
+    </p>
+                <div class="aviso-sorteio" style="background-color: #e8f5e9; border-left: 5px solid #2e7d32; padding: 15px; border-radius: 8px; font-family: sans-serif; max-width: 500px; margin: 20px auto; color: #1b5e20;">
+    <p style="margin: 0; line-height: 1.5; font-size: 16px; text-align: center;">
+        ⏳ O sorteio logo, logo começará... Enquanto isso, nós lhe desejamos <strong>bastante sorte</strong>! 🍀
+    </p>
+    </div>
+
+            
             <div class="modal-body">
                 <div class="form-group" id="grupoNumeroAdmin" style="display: none;">
-                    <label for="numeroAdminInput">Número da Rifa:</label>
+                    <label for="numeroAdminInput">Número do Sorteio:</label>
                     <input type="number" id="numeroAdminInput" min="1" max="500" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="nomeCliente">Nome Completo:</label>
+                    <label for="nomeCliente">Digite seu Nome:</label>
                     <input type="text" id="nomeCliente" placeholder="Digite seu nome">
                 </div>
                 <div class="form-group">
-                    <label for="whatsappCliente">WhatsApp / Informação:</label>
+                    <label for="whatsappCliente">WhatsApp</label>
                     <input type="text" id="whatsappCliente" placeholder="(00) 00000-0000">
                 </div>
             </div>
@@ -929,6 +950,8 @@ onmouseup="this.style.transform='scale(1.05)'">
                     <span id="txtIconeSalvar"></span> Confirmar Número
                 </button>
             </div>
+        </div>
+</div>
         </div>
     </div>
 
@@ -959,7 +982,7 @@ onmouseup="this.style.transform='scale(1.05)'">
                     <p>Ao clicar no botão <span style="background-color: #008060; padding: 3px; border-radius: 3px; font-size: 10px; color: white;">Copia Pix</span>, o PIX do sorteio será copiado e você será direcionado ao WhatsApp com uma mensagem automática com os detalhes do sorteio.</p>
                     <p>​⚠️ Importante: A mensagem no WhatsApp serve para registrarmos o seu pedido no nosso sistema. Não apague o texto automático antes de enviar!</p>
               <div class="instrucoes-pix">
-    <h3 style="text-align: center; color: #0d3b66; font-size: 20px;">O que você precisa fazer agora?</h3>
+    <h3 style="text-align: center; color: #0d3b66; font-size: 17px;">O que você precisa fazer agora?</h3>
     <ol>
         <li>Clicar no botão: <span style="background-color: #008060; padding: 3px; border-radius: 3px; font-size: 10px; color: white;">Copia Pix</span>.</li>
         <li>Envie a mensagem automatica que foi gerada para nós no WhatsApp.</li>
