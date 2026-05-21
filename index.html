@@ -1239,7 +1239,29 @@ onmouseup="this.style.transform='scale(1.05)'">
         btnPagar.addEventListener('click', function() {
             const numerosSelecionados = Object.keys(reservas).map(Number).sort((a, b) => a - b);
             const total = numerosSelecionados.length * valorPorNumero;
-            const textoWhatsapp = `Administração: Participação confirmada!\n\n*Números:* ${numerosSelecionados.join(', ')}\n*Total:* R$ ${total.toFixed(2).replace('.', ',')}\n\n*PIX:* 32865511120 (WILSON MARTINS PEREIRA)`;
+            const
+                
+                
+        let textoWhatsapp = `Administração: Desde agora nós organizadores agradece a sua participação\n\n`;
+            textoWhatsapp += `👤 *Nome:* ${nomeComprador}\n`;
+            textoWhatsapp += `📱 *WhatsApp:* ${whatsComprador}\n\n`;
+            textoWhatsapp += `🔢 *Números Escolhidos:* ${numerosSelecionados.join(', ')}\n`;
+            textoWhatsapp += `💰 *Valor Total:* R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
+            textoWhatsapp += `🔗 *Pix para Pagamento:* ${linkPagamentoExato}\n\n`;
+            textoWhatsapp += `*Nome do Pix:* WILSON MARTINS PEREIRA\n`;
+            textoWhatsapp += `Pague com o Pix ☝️👆\n\n`;
+            textoWhatsapp += `Por favor, nos enviar o comprovante aqui mesmo para valide seu números!`;
+            textoWhatsapp += `Em caso de dúvidas o contato do beneficiário abaixo.\n\n`;
+            textoWhatsapp += `*Contato do Beneficiado:*\n\n`;
+            textoWhatsapp += `*WILSON MARTINS PEREIRA\n\n`;
+            textoWhatsapp += `*CONTAT0: 55 63 92364261\n\n`;
+            textoWhatsapp += `____________________________\n\n`;
+            textoWhatsapp += `*CLICA EM ENVIAR MENSAGEM AUTOMATICA*\n\n`;
+            textoWhatsapp += `👉👉👉👉👉👉\n\n`;
+                
+                
+                
+                ;
             window.open(`https://api.whatsapp.com/send?phone=556291740699&text=${encodeURIComponent(textoWhatsapp)}`, '_blank');
             modalConfirmacao.style.display = 'none';
         });
