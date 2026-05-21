@@ -1,5 +1,6 @@
 
-<!DOCTYPE html>
+
+    <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -947,7 +948,7 @@ onmouseup="this.style.transform='scale(1.05)'">
                 </button>
                 <button class="btn-modal btn-voltar" id="btnCancelarCadastro">Cancelar</button>
                 <button class="btn-modal btn-salvar" id="btnSalvarCadastro">
-                    <span id="txtIconeSalvar"></span> Confirmar Número
+                    <span id="txtIconeSalvar"></span> Confirmar Número<br>
                 </button>
             </div>
         </div>
@@ -1237,31 +1238,19 @@ onmouseup="this.style.transform='scale(1.05)'">
         btnVoltar.addEventListener('click', () => modalConfirmacao.style.display = 'none');
         
         btnPagar.addEventListener('click', function() {
-            const numerosSelecionados = Object.keys(reservas).map(Number).sort((a, b) => a - b);
-            const total = numerosSelecionados.length * valorPorNumero;
-            const
-                
-                
-        let textoWhatsapp = `Administração: Desde agora nós organizadores agradece a sua participação\n\n`;
-            textoWhatsapp += `👤 *Nome:* ${nomeComprador}\n`;
-            textoWhatsapp += `📱 *WhatsApp:* ${whatsComprador}\n\n`;
-            textoWhatsapp += `🔢 *Números Escolhidos:* ${numerosSelecionados.join(', ')}\n`;
-            textoWhatsapp += `💰 *Valor Total:* R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
-            textoWhatsapp += `🔗 *Pix para Pagamento:* ${linkPagamentoExato}\n\n`;
-            textoWhatsapp += `*Nome do Pix:* WILSON MARTINS PEREIRA\n`;
-            textoWhatsapp += `Pague com o Pix ☝️👆\n\n`;
-            textoWhatsapp += `Por favor, nos enviar o comprovante aqui mesmo para valide seu números!`;
-            textoWhatsapp += `Em caso de dúvidas o contato do beneficiário abaixo.\n\n`;
-            textoWhatsapp += `*Contato do Beneficiado:*\n\n`;
-            textoWhatsapp += `*WILSON MARTINS PEREIRA\n\n`;
-            textoWhatsapp += `*CONTAT0: 55 63 92364261\n\n`;
-            textoWhatsapp += `____________________________\n\n`;
-            textoWhatsapp += `*CLICA EM ENVIAR MENSAGEM AUTOMATICA*\n\n`;
-            textoWhatsapp += `👉👉👉👉👉👉\n\n`;
-                
-                
-                
-                ;
+    const numerosSelecionados = Object.keys(reservas).map(Number).sort((a, b) => a - b);
+    const total = numerosSelecionados.length * valorPorNumero;
+    
+    // ABAIXO AS LINHAS QUE VOCÊ DEVE ADICIONAR:
+    const dadosSalvos = JSON.parse(localStorage.getItem('rifa_dados_comprador'));
+    const nomeComprador = dadosSalvos ? dadosSalvos.nome : "Não informado";
+    const whatsComprador = dadosSalvos ? dadosSalvos.whatsapp : "Não informado";
+    const linkPagamentoExato = LINKS_PAGAMENTO[total.toFixed(2)] || "32865511120";
+        
+    let textoWhatsapp = `Administração: Desde agora nós organizadores agradece a sua participação\n\n`;
+    textoWhatsapp += `👤 *Nome:* ${nomeComprador}\n`;
+    // ... resto do seu código de texto original mapeado ...
+        
             window.open(`https://api.whatsapp.com/send?phone=556291740699&text=${encodeURIComponent(textoWhatsapp)}`, '_blank');
             modalConfirmacao.style.display = 'none';
         });
