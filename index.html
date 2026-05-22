@@ -997,7 +997,7 @@ onmouseup="this.style.transform='scale(1.05)'">
             </div>
             <div class="modal-footer">
                 <button class="btn-modal btn-voltar" id="btnVoltar">Voltar</button>
-                <button class="btn-modal btn-pagar" id="btnPagar">Copiar PIX</button>
+                <button class="btn-modal btn-pagar" id="CopiarPix">Copiar PIX</button>
             </div>
         </div>
     </div>
@@ -1079,7 +1079,31 @@ onmouseup="this.style.transform='scale(1.05)'">
                 modalFlutuante.style.display = 'none';
             }
         }
+//🚫🚫🚫
+                // FUNÇÃO PARA COPIAR A CHAVE PIX
+        document.getElementById('CopiarPix').addEventListener('click', function() {
+            const numerosSelecionados = Object.keys(reservas).map(Number).sort((a, b) => a - b);
+            const total = numerosSelecionados.length * valorPorNumero;
+            // Pega a chave PIX correspondente ao valor ou usa a padrão
+            const chavePix = LINKS_PAGAMENTO[total.toFixed(2)] || "32865511120";
 
+            // Copia para a área de transferência
+            navigator.clipboard.writeText(chavePix).then(() => {
+                alert("Chave PIX copiada com sucesso!");
+            }).catch(err => {
+                console.error("Erro ao copiar: ", err);
+                // Alternativa caso o navegador bloqueie o clipboard (ex: falta de HTTPS)
+                const inputProvisorio = document.createElement("input");
+                inputProvisorio.value = chavePix;
+                document.body.appendChild(inputProvisorio);
+                inputProvisorio.select();
+                document.execCommand("copy");
+                document.body.removeChild(inputProvisorio);
+                alert("Chave PIX copiada!");
+            });
+        });
+
+        
 
         function carregarDadosDaPlanilha() {
             fetch(SPREADSHEET_CSV_URL)
