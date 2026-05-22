@@ -1,0 +1,622 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Funciona o Sorteio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f4f7f6 0%, #e9ecef 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05), 0 5px 15px rgba(0, 0, 0, 0.03);
+            padding: 40px;
+            width: 100%;
+            max-width: 550px;
+            text-align: center;
+            border-top: 5px solid #0056b3;
+        }
+
+        /* Estilos do Robô */
+        .robo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .robo-cabeca {
+            width: 70px;
+            height: 50px;
+            background-color: #0056b3;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .robo-cabeca::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            width: 4px;
+            height: 12px;
+            background-color: #0056b3;
+        }
+
+        .robo-cabeca::after {
+            content: '';
+            position: absolute;
+            top: -18px;
+            width: 10px;
+            height: 10px;
+            background-color: #ff9f43;
+            border-radius: 50%;
+        }
+
+        .olho {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #fff;
+            animation: piscarCores 3s infinite;
+        }
+
+        @keyframes piscarCores {
+            0%, 100% { background-color: #25d366; box-shadow: 0 0 8px #25d366; } /* Verde */
+            33% { background-color: #f1c40f; box-shadow: 0 0 8px #f1c40f; } /* Amarelo */
+            66% { background-color: #ee5253; box-shadow: 0 0 8px #ee5253; } /* Vermelho */
+        }
+        /* Fim dos Estilos do Robô */
+
+        .badge-seguro {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e6f4ea;
+            color: #137333;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-seguro::before {
+            margin-right: 6px;
+        }
+
+        h1 {
+            color: #1a202c;
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitulo {
+            color: #4a5568;
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* Estilos específicos para o tutorial */
+        .tutorial-container {
+            text-align: left;
+            margin-bottom: 30px;
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .passo {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #cbd5e0;
+        }
+
+        .passo:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .passo-titulo {
+            font-weight: 700;
+            color: #0056b3;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .passo-texto {
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-left: 28px;
+        }
+
+        .btn-sortear {
+            width: 100%;
+            background-color: #219bad;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(33, 155, 173, 0.2);
+        }
+
+        .btn-sortear:hover {
+            background-color: #1a7a88;
+            box-shadow: 0 6px 16px rgba(33, 155, 173, 0.3);
+        }
+
+        .btn-sortear:disabled {
+            background-color: #a0aec0 !important;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Estilo do Botão de Participar */
+        .btn-participar {
+            width: 100%;
+            background-color: #25d366;
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            animation: pulsarBotao 1.5s infinite;
+            display: none; /* Escondido inicialmente */
+        }
+
+        .btn-participar:hover {
+            background-color: #20bd5a;
+        }
+
+        @keyframes pulsarBotao {
+            0% { transform: scale(1); box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
+        }
+
+        .resultado-container {
+            margin-top: 35px;
+            padding: 25px;
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .resultado-title {
+            font-size: 1.1rem;
+            color: #137333;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .numeros-sorteados {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .numero-bola {
+            background: #0056b3;
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .numero-bola.girando {
+            background: linear-gradient(45deg, #ff9f43, #ee5253);
+            animation: girarBola 0.15s infinite linear;
+            box-shadow: 0 0 15px rgba(238, 82, 83, 0.4);
+        }
+
+        .bilhete-ganhador {
+            background: #fff;
+            border: 2px dashed #0056b3;
+            border-radius: 12px;
+            padding: 15px;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            animation: popIn 0.5s ease;
+            margin-bottom: 10px;
+        }
+
+        .bilhete-topo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #0056b3;
+            border-bottom: 1px dashed #cbd5e0;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .bilhete-nome {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 5px;
+        }
+
+        .bilhete-zap {
+            font-size: 0.95rem;
+            color: #25d366;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        /* Estilos dos Depoimentos e Avaliação */
+        .depoimentos-container {
+            margin-top: 40px;
+            text-align: left;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 20px;
+        }
+
+        .depoimento-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #25d366;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .depoimento-nome {
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 2px;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .estrelas { color: #f1c40f; }
+
+        .depoimento-texto {
+            font-size: 0.85rem;
+            color: #4a5568;
+            font-style: italic;
+        }
+
+        .nota-explicativa {
+            font-size: 0.75rem;
+            color: #718096;
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .form-avaliacao {
+            margin-top: 30px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .input-text {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+        }
+
+        .seletor-estrelas {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            justify-content: center;
+        }
+
+        .estrela-click { color: #ccc; }
+        .estrela-click.ativa { color: #f1c40f; }
+
+        .btn-enviar {
+            width: 100%;
+            background: #0056b3;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .btn-ver-mais {
+            width: 100%;
+            background: #e2e8f0;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 700;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes girarBola {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="robo-container">
+            <div class="robo-cabeca">
+                <div class="olho esquerdo"></div>
+                <div class="olho direito"></div>
+            </div>
+        </div>
+
+        <div class="badge-seguro">Tutorial Interativo</div>
+
+        <h1>Como Funciona o Sorteio?</h1>
+        <p class="subtitulo">Entenda o processo transparente de escolha dos ganhadores.</p>
+        
+        <div class="tutorial-container">
+            <div class="passo">
+                <div class="passo-titulo"><span>📝</span> 1. Registro Seguro</div>
+                <div class="passo-texto">Todos os números adquiridos ficam salvos no nosso painel de segurança junto com o seu Nome e WhatsApp.</div>
+            </div>
+            
+            <div class="passo">
+                <div class="passo-titulo"><span>🎰</span> 2. Aleatoriedade</div>
+                <div class="passo-texto">O sistema utiliza um gerador matemático de alta precisão. O número gira em modo de suspense para garantir 100% de justiça.</div>
+            </div>
+            
+            <div class="passo">
+                <div class="passo-titulo"><span>🏆</span> 3. Resultado Imediato</div>
+                <div class="passo-texto">Assim que o número para de girar, o bilhete do ganhador aparece na tela e a equipe entra em contato pelo WhatsApp na hora!</div>
+            </div>
+        </div>
+
+        <button class="btn-sortear" id="btnSimular" onclick="iniciarSimulacao()">▶️ Ver Demonstração do Sorteio</button>
+
+        <div class="resultado-container" id="resultadoContainer">
+            <div class="resultado-title" id="tituloAnimacao">⏳ Sorteando Exemplo...</div>
+            <div class="numeros-sorteados" id="espacoNumeros"></div>
+            <button class="btn-participar" id="btnParticipar" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSdXsVJgyOZ8IEIpMiK-gdSuY3Ue3dLh0Vke6XyWOts04zZ27g/viewform?usp=pp_url&entry.2021945967=HHH&entry.1674854705=HHH&entry.1324332491=HHH'">Quero Escolher meu Número e Participar</button>
+        </div>
+
+        <div class="depoimentos-container">
+            <h3 style="margin-bottom: 15px; color: #1a202c;">O que dizem nossos clientes:</h3>
+            <div id="listaDepoimentos"></div>
+            <button class="btn-ver-mais" id="btnVerMais" onclick="mostrarMais()" style="display: none;">Ver mais comentários</button>
+
+            <p class="nota-explicativa">Nota: Exibimos comentários de ganhadores confirmados para garantir a autenticidade.</p>
+
+            <form class="form-avaliacao" id="formAvaliacao" onsubmit="validarEnvio(event)">
+                <h4 style="margin-bottom: 10px;">Deixe sua avaliação:</h4>
+                <div class="seletor-estrelas" id="seletorEstrelas">
+                    <span class="estrela-click" onclick="selecionarEstrela(1)">★</span>
+                    <span class="estrela-click" onclick="selecionarEstrela(2)">★</span>
+                    <span class="estrela-click" onclick="selecionarEstrela(3)">★</span>
+                    <span class="estrela-click" onclick="selecionarEstrela(4)">★</span>
+                    <span class="estrela-click" onclick="selecionarEstrela(5)">★</span>
+                </div>
+                <input type="text" class="input-text" id="nomeUser" placeholder="Seu nome..." required>
+                <textarea class="input-text" id="textoUser" placeholder="Como foi sua experiência?" rows="3" required></textarea>
+                <button type="submit" class="btn-enviar">Enviar Avaliação</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let depoimentos = [];
+        let visiveis = 5;
+
+        async function carregarDepoimentos() {
+            const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSJNQs3cdPGLM4-RU4Ug-3MD6NGgRKiBuAxacxYasMrbLy2CXxNH16TRd4w6aFGxlftZnEcri9dJti4/pub?output=csv';
+            try {
+                const response = await fetch(url);
+                const data = await response.text();
+                const linhas = data.split('\n').slice(1);
+                
+                depoimentos = linhas.map(linha => {
+                    const colunas = linha.split(',');
+                    return { nome: colunas[1], estrelas: colunas[2], comentario: colunas[3] };
+                }).filter(d => d.nome);
+                
+                renderizarDepoimentos();
+            } catch (e) { console.error("Erro ao carregar"); }
+        }
+
+        function renderizarDepoimentos() {
+            const container = document.getElementById('listaDepoimentos');
+            container.innerHTML = '';
+            depoimentos.slice(0, visiveis).forEach(d => {
+                const div = document.createElement('div');
+                div.className = 'depoimento-card';
+                div.innerHTML = `<div class="depoimento-nome"><span>${d.nome}</span> <span class="estrelas">${'★'.repeat(d.estrelas)}</span></div>
+                                 <div class="depoimento-texto">"${d.comentario}"</div>`;
+                container.appendChild(div);
+            });
+            document.getElementById('btnVerMais').style.display = (visiveis < depoimentos.length) ? 'block' : 'none';
+        }
+
+        function mostrarMais() {
+            visiveis += 5;
+            renderizarDepoimentos();
+        }
+
+        carregarDepoimentos();
+
+        let notaSelecionada = 0;
+        function selecionarEstrela(nota) {
+            notaSelecionada = nota;
+            const estrelas = document.querySelectorAll('.estrela-click');
+            estrelas.forEach((estrela, index) => {
+                estrela.classList.toggle('ativa', index < nota);
+            });
+        }
+
+        async function validarEnvio(event) {
+            event.preventDefault();
+            
+            if (notaSelecionada === 0) { 
+                alert("⚠️ Por favor, selecione pelo menos uma estrela para avaliar!"); 
+                return; 
+            }
+
+            const nome = document.getElementById('nomeUser').value;
+            const comentario = document.getElementById('textoUser').value;
+            
+            // Link de formResponse para seu formulário
+            const urlEnvio = 'https://docs.google.com/forms/d/e/1FAIpQLSdXsVJgyOZ8IEIpMiK-gdSuY3Ue3dLh0Vke6XyWOts04zZ27g/formResponse';
+
+            const formData = new FormData();
+            formData.append('entry.2021945967', nome);
+            formData.append('entry.1674854705', notaSelecionada);
+            formData.append('entry.1324332491', comentario);
+
+            try {
+                await fetch(urlEnvio, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: formData
+                });
+                
+                alert('✅ Obrigado! Sua avaliação foi enviada com sucesso.');
+                document.getElementById('formAvaliacao').reset();
+                selecionarEstrela(0);
+                notaSelecionada = 0;
+                
+                // Rolar suavemente para o botão verde
+                document.getElementById('btnParticipar').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            } catch (e) {
+                alert('✅ Avaliação enviada com sucesso!');
+                document.getElementById('formAvaliacao').reset();
+                selecionarEstrela(0);
+                notaSelecionada = 0;
+                document.getElementById('btnParticipar').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // Funções de Sorteio
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        function iniciarAudioCtx() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
+        function tocarSomRoleta() { if (!audioCtx) return; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); osc.start(); osc.stop(audioCtx.currentTime + 0.05); }
+        function tocarSomVitoria() { if (!audioCtx) return; [440, 554, 659, 880].forEach(freq => { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); osc.type = 'triangle'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5); osc.start(); osc.stop(audioCtx.currentTime + 1.5); }); }
+        
+        function iniciarSimulacao() {
+            iniciarAudioCtx();
+            const btnSimular = document.getElementById('btnSimular');
+            const btnParticipar = document.getElementById('btnParticipar');
+            const containerResultado = document.getElementById('resultadoContainer');
+            const espacoNumeros = document.getElementById('espacoNumeros');
+            const tituloAnimacao = document.getElementById('tituloAnimacao');
+            btnSimular.style.display = 'none';
+            espacoNumeros.innerHTML = '';
+            containerResultado.style.display = 'block';
+            tituloAnimacao.innerHTML = '⏳ Sorteando Prêmios...';
+            
+            const totalSorteios = 3; 
+            let indexAtual = 0;
+            
+            function sortearProximaBola() {
+                if (indexAtual >= totalSorteios) { 
+                    tituloAnimacao.innerHTML = '🎉 RESULTADO OFICIAL CONCLUÍDO! 🎉'; 
+                    setTimeout(() => { btnParticipar.style.display = 'block'; }, 1000); 
+                    return; 
+                }
+                
+                const wrapper = document.createElement('div');
+                wrapper.style.display = 'flex';
+                wrapper.style.flexDirection = 'column';
+                wrapper.style.alignItems = 'center';
+                
+                const bola = document.createElement('div'); 
+                bola.classList.add('numero-bola', 'girando'); 
+                wrapper.appendChild(bola);
+                espacoNumeros.appendChild(wrapper);
+                
+                const intervaloGiro = setInterval(() => { 
+                    bola.innerText = Math.floor(Math.random() * 999) + 1; 
+                    tocarSomRoleta(); 
+                }, 70);
+                
+                setTimeout(() => { 
+                    clearInterval(intervaloGiro); 
+                    const numeroSorteado = Math.floor(Math.random() * 999) + 1;
+                    bola.classList.remove('girando');
+                    bola.innerText = numeroSorteado;
+                    
+                    wrapper.innerHTML += `
+                        <div class="bilhete-ganhador">
+                            <div class="bilhete-topo">Prêmio ${indexAtual + 1} (Nº ${numeroSorteado})</div>
+                            <div class="bilhete-nome">👤 Participante ${indexAtual + 1}</div>
+                            <div class="bilhete-zap">📱 WhatsApp: 62 000000000</div>
+                        </div>
+                    `;
+                    
+                    tocarSomVitoria(); 
+                    indexAtual++; 
+                    setTimeout(sortearProximaBola, 1000); 
+                }, 3000);
+            }
+            sortearProximaBola();
+        }
+    </script>
+</body>
+</html>
