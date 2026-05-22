@@ -997,7 +997,7 @@ onmouseup="this.style.transform='scale(1.05)'">
             </div>
             <div class="modal-footer">
                 <button class="btn-modal btn-voltar" id="btnVoltar">Voltar</button>
-                <button class="btn-modal btn-pagar" id="CopiarPix">Copiar PIX</button>
+                <button class="btn-modal btn-pagar" id="btnPagar">Copiar PIX</button>
             </div>
         </div>
     </div>
@@ -1081,7 +1081,7 @@ onmouseup="this.style.transform='scale(1.05)'">
         }
 //🚫🚫🚫
                 // FUNÇÃO PARA COPIAR A CHAVE PIX
-        document.getElementById('CopiarPix').addEventListener('click', function() {
+        document.getElementById('btnPagar').addEventListener('click', function() {
             const numerosSelecionados = Object.keys(reservas).map(Number).sort((a, b) => a - b);
             const total = numerosSelecionados.length * valorPorNumero;
             // Pega a chave PIX correspondente ao valor ou usa a padrão
