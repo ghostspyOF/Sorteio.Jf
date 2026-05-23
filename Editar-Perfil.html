@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esitar Perfil</title>
+    <style>
+        /* =========================================
+           RESET E RESPONSIVIDADE
+           ========================================= */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 380px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        /* =========================================
+           ESTILOS DO CONTEÚDO
+           ========================================= */
+        .header { padding: 20px 15px 10px; }
+        .header h1 { color: #003366; font-size: 22px; }
+        
+        .profile-section { padding: 0 15px; }
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 auto;
+        }
+        .profile-name { color: #bfa071; font-weight: bold; font-size: 16px; }
+        .profile-desc { color: grey; font-size: 12px; }
+
+        .linha-divisoria {
+            border: none;
+            border-top: 1px dashed #ccc;
+            margin: 20px 15px;
+        }
+
+        .meta-box {
+            background-color: #f0f7ff;
+            border-left: 5px solid #003366;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .meta-box p { color: #666; font-size: 14px; font-weight: bold; margin: 2px 0; }
+        .meta-value { color: #cc0000 !important; font-size: 24px !important; }
+        
+        .prizes-container { display: flex; flex-direction: column; gap: 15px; margin: 15px; }
+        
+        .prize-card {
+            background-color: #faf8f5;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .prize-tag {
+            background-color: #cc0000;
+            color: white;
+            border-radius: 5px;
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .prize-value { color: #003366; font-weight: bold; font-size: 16px; }
+        .prize-card img { width: 100%; border-radius: 5px; max-height: 150px; object-fit: cover; background-color: #000; display: block; }
+        .illustrative { color: #888; font-size: 12px; margin-top: 5px; }
+        
+        .date-box {
+            background-color: #f0f7ff;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 5px solid #003366;
+        }
+        .date-label { color: #bfa071; font-weight: bold; font-size: 14px;}
+        .countdown-inner {
+            background-color: #003366;
+            color: white;
+            padding: 20px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .date-title { color: #cc0000; font-weight: bold; margin-bottom: 5px;}
+        
+        .gratitude { color: #cc0000; font-weight: bold; font-size: 14px; }
+        .gratitude .heart { color: red; }
+        
+        .links { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 10px 15px; }
+        .links a { color: #888; text-decoration: none; font-size: 14px; }
+
+        /* =========================================
+           SISTEMA DE EDIÇÃO
+           ========================================= */
+        .editable-wrapper {
+            position: relative;
+            display: inline-block;
+            width: fit-content;
+            max-width: 100%;
+            border: 2px dashed transparent;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            padding: 4px;
+        }
+        .editable-wrapper.full-width { width: 100%; display: block; }
+        .container:hover .editable-wrapper { border-color: rgba(0, 51, 102, 0.1); }
+        .editable-wrapper:hover { border-color: #cc0000 !important; background-color: rgba(204, 0, 0, 0.03); z-index: 15; }
+        .edit-btn {
+            position: absolute; top: -12px; right: -12px; background: #ffffff; color: #003366;
+            border: 2px solid #003366; border-radius: 50%; width: 26px; height: 26px;
+            cursor: pointer; font-size: 12px; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2); z-index: 20; transition: all 0.2s; opacity: 0.6;
+        }
+        .edit-btn::before { content: "✏️"; }
+
+        /* =========================================
+           MODAL E SELETORES
+           ========================================= */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; padding: 20px;
+        }
+        .modal-box { background: white; padding: 25px; border-radius: 15px; width: 100%; max-width: 320px; text-align: center; }
+        .selector-btn { flex: 1; border: 2px solid #ddd; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; background: white; transition: 0.3s; }
+        
+        .selector-btn.active-editar { background: #008000; color: white; border-color: #008000; }
+        
+        .btn-confirmar { width: 100%; background: #003366; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="editable-wrapper"><h1 class="edit-target">SORTEIO-3</h1><button class="edit-btn" onclick="openEditModal(this, 'text', '-1')"></button></div>
+    </div>
+    
+    <div class="profile-section">
+        <div class="editable-wrapper"><div class="profile-img edit-target">LOGO</div><button class="edit-btn" onclick="openEditModal(this, 'text', '-2')"></button></div>
+        <br>
+        <div class="editable-wrapper" style="margin-top: 10px;"><p class="profile-name edit-target">Mayckon Jhonatas</p><button class="edit-btn" onclick="openEditModal(this, 'text', '-3')"></button></div>
+        <br>
+        <div class="editable-wrapper" style="margin-top: 5px;"><p class="profile-desc edit-target">Texto-2</p><button class="edit-btn" onclick="openEditModal(this, 'text', '-4')"></button></div>
+    </div>
+
+    <hr class="linha-divisoria">
+
+    <div class="meta-box">
+        <div class="editable-wrapper full-width"><p class="edit-target">META DA ARRECADAÇÃO</p><button class="edit-btn" onclick="openEditModal(this, 'text', '-5')"></button></div>
+        <div class="editable-wrapper full-width"><p class="meta-value edit-target">R$ 24.999.00</p><button class="edit-btn" onclick="openEditModal(this, 'text', '-6')"></button></div>
+        <div class="editable-wrapper full-width"><p style="font-weight: normal;" class="edit-target">Valor total</p><button class="edit-btn" onclick="openEditModal(this, 'text', '-7')"></button></div>
+    </div>
+
+    <hr class="linha-divisoria" style="border-color: #bfa071;">
+
+    <div class="prizes-container">
+        <div class="prize-card full-width">
+            <div><span class="prize-tag edit-target">1º PRÊMIO</span><button class="edit-btn" onclick="openEditModal(this, 'text', '-8')"></button></div><br>
+            <div class="editable-wrapper" style="margin: 10px 0;"><p class="prize-value edit-target">R$ 400.00 REAIS NO PIX</p><button class="edit-btn" onclick="openEditModal(this, 'text', '-9')"></button></div>
+            <div class="editable-wrapper full-width"><img src="" class="edit-target" alt="Notas"><button class="edit-btn" onclick="openEditModal(this, 'image', '-10')"></button></div>
+        </div>
+    </div>
+    
+     <div class="prizes-container">
+        <div class="prize-card full-width">
+            <div><span class="prize-tag edit-target">2º PRÊMIO</span><button class="edit-btn" onclick="openEditModal(this, 'text', '-11')"></button></div><br>
+            <div class="editable-wrapper" style="margin: 10px 0;"><p class="prize-value edit-target">R$ 100.00 REAIS NO PIX</p><button class="edit-btn" onclick="openEditModal(this, 'text', '-12')"></button></div>
+            <div class="editable-wrapper full-width"><img src="" class="edit-target" alt="Notas"><button class="edit-btn" onclick="openEditModal(this, 'image', '-13')"></button></div>
+        </div>
+    </div>
+    <div class="prizes-container prize-card">
+        <p>QUANTIDADE DE NUMEROS DO SORTEIO</p>
+        <input type="text" id="inputQuantidade" placeholder="Ex.: 100" style="width:100%; padding:10px; margin-bottom:10px;">
+        <button class="selector-btn" onclick="executarAcaoQuantidade()" style="background-color: red; color: white;">ATUALIZAR</button>
+    </div>
+
+    <div class="prizes-container prize-card">
+        <p>QUANTIDADE DE NUMEROS DO SORTEIO 2</p>
+        <input type="text" id="inputQuantidade2" placeholder="Ex.: 200" style="width:100%; padding:10px; margin-bottom:10px;">
+        <button class="selector-btn" onclick="executarAcaoQuantidade2()" style="background-color: red; color: white;">ATUALIZAR 2</button>
+    </div>
+
+    <div class="prizes-container prize-card">
+        <p>QUANTIDADE DE NUMEROS DO SORTEIO 3</p>
+        <input type="text" id="inputQuantidade3" placeholder="Ex.: 300" style="width:100%; padding:10px; margin-bottom:10px;">
+        <button class="selector-btn" onclick="executarAcaoQuantidade3()" style="background-color: red; color: white;">ATUALIZAR 3</button>
+    </div>
+
+    <div class="date-box">
+        <div class="editable-wrapper full-width"><p class="date-label edit-target">Valor do Sorteio: R$ 32.00 REAIS</p><button class="edit-btn" onclick="openEditModal(this, 'text', '-14')"></button></div>
+        <div class="countdown-inner">
+            <div class="full-width"><p class="date-title edit-target">DATA DO SORTEIO:</p></div>
+            <div class="editable-wrapper full-width"><p id="countdown" class="edit-target" style="font-weight: bold; margin-top: 5px;">Quando todos os...</p><button class="edit-btn" onclick="openEditModal(this, 'text', '-15')"></button></div>
+        </div>
+    </div>
+
+    <div class="date-box" style="margin-top: 15px;">
+        <div class="editable-wrapper full-width"><p class="edit-target">Texto Adicional 1 Novo</p><button class="edit-btn" onclick="openEditModal(this, 'text', '-16')"></button></div>
+    </div>
+
+    <div class="date-box" style="margin-top: 15px;">
+        <div class="editable-wrapper full-width"><p class="edit-target">Texto Adicional 2 Novo</p><button class="edit-btn" onclick="openEditModal(this, 'text', '-17')"></button></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-1">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-1" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-1" value="2" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-1" onclick="setMode('editar', '-1')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-1')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-2">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-2" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-2" value="3" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-2" onclick="setMode('editar', '-2')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-2')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-3">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-3" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-3" value="4" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-3" onclick="setMode('editar', '-3')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-3')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-4">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-4" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-4" value="5" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-4" onclick="setMode('editar', '-4')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-4')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-5">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-5" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-5" value="6" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-5" onclick="setMode('editar', '-5')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-5')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-6">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-6" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-6" value="7" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-6" onclick="setMode('editar', '-6')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-6')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-7">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-7" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-7" value="8" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-7" onclick="setMode('editar', '-7')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-7')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-8">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-8" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-8" value="9" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-8" onclick="setMode('editar', '-8')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-8')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-9">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-9" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-9" value="9" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-9" onclick="setMode('editar', '-9')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-9')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-10">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-10" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-10" value="10" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-10" onclick="setMode('editar', '-10')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-10')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-11">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-11" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-11" value="10" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-11" onclick="setMode('editar', '-11')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-11')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-12">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-12" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-12" value="11" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-12" onclick="setMode('editar', '-12')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-12')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-13">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-13" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-13" value="12" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-13" onclick="setMode('editar', '-13')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-13')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-14">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-14" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-14" value="13" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-14" onclick="setMode('editar', '-14')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-14')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-15">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-15" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-15" value="14" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-15" onclick="setMode('editar', '-15')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-15')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-16">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-16" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-16" value="15" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-16" onclick="setMode('editar', '-16')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-16')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="editModal-17">
+    <div class="modal-box">
+        <h3>Opções</h3>
+        <input type="text" id="modalInput-17" placeholder="Campo 1" style="width:100%; padding:10px; margin-bottom:10px;">
+        <input type="text" id="modalInput-2-17" value="16" style="width:100%; padding:10px; margin-bottom:10px;" readonly>
+        <div class="modal-buttons" style="display: flex; gap: 10px;">
+            <button class="selector-btn" id="selEditar-17" onclick="setMode('editar', '-17')">EDITAR</button>
+        </div>
+        <button class="btn-confirmar" onclick="executarAcao()">CONFIRMAR</button>
+        <button class="btn-cancelar" onclick="closeModal('-17')" style="width:100%; margin-top:10px; padding:10px; background:#eee; border:none; border-radius:8px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+<script>
+    let currentWrapper = null;
+    let currentTarget = null;
+    let currentType = 'text';
+    let modoSelecionado = '';
+    let currentModalId = '';
+
+    function openEditModal(btnElement, type, suffix) {
+        currentWrapper = btnElement.closest('.editable-wrapper');
+        currentTarget = currentWrapper.querySelector('.edit-target');
+        currentType = type;
+        modoSelecionado = 'editar';
+        currentModalId = suffix;
+
+        document.getElementById('selEditar' + suffix).className = 'selector-btn active-editar';
+
+        const input = document.getElementById('modalInput' + suffix);
+        input.value = (type === 'image') ? currentTarget.src : currentTarget.innerText;
+        document.getElementById('editModal' + suffix).style.display = 'flex';
+    }
+
+    function setMode(mode, suffix) {
+        modoSelecionado = mode;
+        if(mode === 'editar') {
+            document.getElementById('selEditar' + suffix).className = 'selector-btn active-editar';
+        }
+    }
+
+    function executarAcaoQuantidade() {
+        const valor = document.getElementById('inputQuantidade').value;
+        const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
+        
+        let formData = new FormData();
+        formData.append("entry.624057932", valor);
+        formData.append("entry.818510544", "19");
+        formData.append("entry.1941861272", "Editado");
+
+        fetch(formUrl, {
+            method: "POST",
+            mode: "no-cors",
+            body: formData
+        });
+        alert("Enviado com sucesso!");
+    }
+
+    /* Adicionado: Função de Envio para a Quantidade de Sorteio 2 */
+    function executarAcaoQuantidade2() {
+        const valor = document.getElementById('inputQuantidade2').value;
+        const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
+        
+        let formData = new FormData();
+        formData.append("entry.624057932", valor);
+        formData.append("entry.818510544", "20"); // Valor sequencial identificador alterado para 20
+        formData.append("entry.1941861272", "Editado");
+
+        fetch(formUrl, {
+            method: "POST",
+            mode: "no-cors",
+            body: formData
+        });
+        alert("Enviado com sucesso!");
+    }
+
+    /* Adicionado: Função de Envio para a Quantidade de Sorteio 3 */
+    function executarAcaoQuantidade3() {
+        const valor = document.getElementById('inputQuantidade3').value;
+        const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
+        
+        let formData = new FormData();
+        formData.append("entry.624057932", valor);
+        formData.append("entry.818510544", "21"); // Valor sequencial identificador alterado para 21
+        formData.append("entry.1941861272", "Editado");
+
+        fetch(formUrl, {
+            method: "POST",
+            mode: "no-cors",
+            body: formData
+        });
+        alert("Enviado com sucesso!");
+    }
+
+    function executarAcao() {
+        const valorInput = document.getElementById('modalInput' + currentModalId).value;
+        const valorInput2 = document.getElementById('modalInput-2' + currentModalId).value;
+        const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
+        
+        let formData = new FormData();
+        formData.append("entry.624057932", valorInput);
+        formData.append("entry.818510544", valorInput2);
+
+        if (modoSelecionado === 'excluir') {
+            formData.append("entry.1941861272", "EXCLUIR");
+        } else if (modoSelecionado === 'editar') {
+            formData.append("entry.1941861272", "Editado");
+            if (currentType === 'image') currentTarget.src = valorInput;
+            else currentTarget.innerText = valorInput;
+        }
+
+        if(modoSelecionado) {
+            fetch(formUrl, {
+                method: "POST",
+                mode: "no-cors",
+                body: formData
+            });
+        }
+        
+        closeModal(currentModalId);
+    }
+
+    function closeModal(suffix) { 
+        if(!suffix) suffix = currentModalId;
+        document.getElementById('editModal' + suffix).style.display = 'none'; 
+    }
+</script>
+
+</body>
+</html>
