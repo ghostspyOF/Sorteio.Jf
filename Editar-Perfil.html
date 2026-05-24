@@ -596,67 +596,59 @@
 
 <script>
     //🔒🔒🔒TRVA PARA QUALQUER SITE🔒🔒🔒
-    async function validarAcessoPainel() {
+    // 🔒 Trava de Segurança com Backend
+async function validarAcessoPainel() {
     const usuarioInput = document.getElementById('authID').value.trim();
     const senhaInput = document.getElementById('authSenha').value.trim();
     const divErro = document.getElementById('erroAuth');
     const telaBloqueio = document.getElementById('bloqueio-seguranca');
 
-  // Garanta que colocou o seu link do Google terminando em /exec aqui
-        const urlBackend = "https://script.google.com/macros/s/AKfycbxnFPcHlGE0qldY0LBW1YEwRyyNt9Oeh_NqAXEnjM2srfwgvElum5JmfSYmPqP6NzhJZA/exec";
+    const urlBackend = "https://script.google.com/macros/s/AKfycbxnFPcHlGE0qldY0LBW1YEwRyyNt9Oeh_NqAXEnjM2srfwgvElum5JmfSYmPqP6NzhJZA/exec";
 
-        // Prepara os dados no formato que o Google adora receber (URL Encoded)
+    // Se o usuário esqueceu de digitar algo, já avisa e para aqui
+    if (!usuarioInput || !senhaInput) {
+        if (divErro) divErro.style.display = 'block';
+        return;
+    }
+
+    try {
+        // Prepara os dados no formato que o Google Apps Script lê perfeitamente
         const dadosFormulario = new URLSearchParams();
         dadosFormulario.append('usuario', usuarioInput);
         dadosFormulario.append('senha', senhaInput);
 
-        // Envia para o seu Backend
+        // Envia para o seu Backend no Google
         const resposta = await fetch(urlBackend, {
             method: 'POST',
-            body: dadosFormulario // Enviando como formulário simples
+            body: dadosFormulario
         });
 
-        // Recebe a resposta
+        // Lê a resposta final do servidor
         const resultado = await resposta.json();
 
-    try {
-        // Envia o ID e a Senha para o seu Backend
-        const resposta = await fetch(urlBackend, {
-            method: 'POST',
-            // Mudamos o Content-Type para text/plain para o Google aceitar sem bloquear a conexão
-            headers: {
-                'Content-Type': 'text/plain;charset=utf-8'
-            },
-            body: JSON.stringify({
-                usuario: usuarioInput,
-                senha: senhaInput
-            })
-        });
-
-        // Recebe a resposta do servidor (true ou false)
-        const resultado = await resposta.json();
-
-        // Se o backend disser que está autorizado
+        // Verifica se o backend deu sinal verde
         if (resultado.autorizado === true) {
-            telaBloqueio.style.display = 'none';
-            divErro.style.display = 'none';
+            if (telaBloqueio) telaBloqueio.style.display = 'none';
+            if (divErro) divErro.style.display = 'none';
         } else {
-            // Se o backend recusar o acesso
-            divErro.style.display = 'block';
+            // Se o ID ou Senha estiverem errados
+            if (divErro) divErro.style.display = 'block';
             document.getElementById('authSenha').value = '';
         }
 
     } catch (erro) {
-        console.error("Erro ao validar acesso com o servidor:", erro);
-        alert("Erro de conexão ao validar o acesso. Tente novamente mais tarde.");
+        // Se houver qualquer falha de digitação ou rede, este alerta vai te avisar
+        console.error("Erro interno:", erro);
+        alert("Erro ao conectar com o servidor: " + erro.message);
     }
 }
 
+// Atalho para funcionar ao apertar Enter
 document.getElementById('authSenha').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         validarAcessoPainel();
     }
-});
+});;
 
 //🔒🔒🔒🔒🔒🔒
 
