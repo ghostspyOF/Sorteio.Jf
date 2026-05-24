@@ -593,28 +593,61 @@
 
 <script>
     
-    function validarAcessoPainel() {
-        const idValido = "Mayckon";
-        const senhaValida = "MJSR10";
-        
-        const usuarioInput = document.getElementById('authID').value;
-        const senhaInput = document.getElementById('authSenha').value;
-        const divErro = document.getElementById('erroAuth');
-        const telaBloqueio = document.getElementById('bloqueio-seguranca');
+    async function validarAcessoPainel() {
+    const usuarioInput = document.getElementById('authID').value;
+    const senhaInput = document.getElementById('authSenha').value;
+    const divErro = document.getElementById('erroAuth');
+    const telaBloqueio = document.getElementById('bloqueio-seguranca');
 
-        if (usuarioInput === idValido && senhaInput === senhaValida) {
+    // URL da sua planilha publicada como CSV
+    const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSJNQs3cdPGLM4-RU4Ug-3MD6NGgRKiBuAxacxYasMrbLy2CXxNH16TRd4w6aFGxlftZnEcri9dJti4/pub?output=csv";
+
+    try {
+        // Busca os dados da planilha
+        const resposta = await fetch(urlPlanilha);
+        const dadosTexto = await reply.text();
+
+        // Divide o CSV em linhas
+        const linhas = dadosTexto.split('\n');
+        
+        let acessoPermitido = false;
+
+        // Percorre cada linha da planilha
+        for (let i = 0; i < linhas.length; i++) {
+            // Divide a linha pelas vírgulas (colunas)
+            // .map(c => c.trim().replace(/^"|"$/g, '')) remove espaços e aspas extras que o Google Sheets costuma colocar
+            const colunas = linhas[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+
+            // Coluna B é o índice 1, Coluna C é o índice 2 (JavaScript começa no 0)
+            const idPlanilha = colunas[1];
+            const senhaPlanilha = colunas[2];
+
+            // Verifica se o ID e a Senha digitados batem com a linha atual
+            if (usuarioInput === idPlanilha && senhaInput === senhaPlanilha) {
+                acessoPermitido = true;
+                break; // Se achou o usuário, para o laço
+            }
+        }
+
+        if (acessoPermitido) {
             telaBloqueio.style.display = 'none';
         } else {
             divErro.style.display = 'block';
             document.getElementById('authSenha').value = '';
         }
-    }
 
-    document.getElementById('authSenha').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            validarAcessoPainel();
-        }
-    });
+    } catch (erro) {
+        console.error("Erro ao buscar dados da planilha:", erro);
+        alert("Erro de conexão ao validar o acesso. Tente novamente mais tarde.");
+    }
+}
+
+document.getElementById('authSenha').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        validarAcessoPainel();
+    }
+});
+
 
     
     let currentWrapper = null;
