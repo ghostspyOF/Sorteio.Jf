@@ -554,8 +554,9 @@
             </div>
         </div>
 
+        <!--🔒🔒🔒🔒⬇⬇bOTAO COM O MODAL COM SENHA E ID ⬇⬇⬇⬇🔒🔒🔒🔒🔒-->
         <button class="btn-sortear" id="btnOficial" onclick="solicitarSenhaAdmin('sorteio')">Começar Sorteio Oficial</button>
-
+        <!-- 🔒🔒🔒🔒⬆⬆⬆⬆⬆⬆⬆🔒🔒🔒🔒🔒 -->
         <div class="resultado-container" id="resultadoContainer">
             <div class="resultado-title" id="resultadoGeralTitulo">🎉 Número(s) Sorteado(s) 🎉</div>
             <div class="numeros-sorteados" id="espacoNumeros"></div>
@@ -632,7 +633,7 @@ onmouseup="this.style.transform='scale(1.05)'">
 </button></a>
         </div>
 
-        <button class="btn-admin" onclick="solicitarSenhaAdmin('painel')">🛡️ Painel Admin</button>
+        <button class="btn-admin" onclick="abrirAdmin()">🛡️ Painel Admin</button>
 
     <div class="modal-admin" id="modalAvisoLista">
         <div class="modal-content card-aviso">
@@ -640,11 +641,12 @@ onmouseup="this.style.transform='scale(1.05)'">
             <p style="font-size: 0.95rem; color: #4a5568; margin-bottom: 20px; line-height: 1.5;">Por favor, cadastre a lista de participantes no Painel Admin antes de iniciar o Sorteio Oficial.</p>
             <div class="modal-botoes" style="justify-content: center; gap: 15px;">
                 <button class="btn-fechar" onclick="cancelarAvisoLista()">Cancelar</button>
-                <button class="btn-prosseguir">Cadastrar Lista</button>
+                <button class="btn-prosseguir" onclick="prosseguirParaAdmin()">Cadastrar Lista</button>
             </div>
         </div>
     </div>
 
+        <!--🔒🔒🔒🔒⬇⬇⬇⬇⬇MODAL PESONALIZADO COM A FUNCAO DE PEDIIR ID e SENHA ⬇⬇⬇⬇⬇🔒🔒🔒-->
     <div id="bloqueio-seguranca" style="display: none;"> 
         <div class="modal-autenticacao" style="position: relative; padding-top: 40px;">
         
@@ -698,7 +700,8 @@ onmouseup="this.style.transform='scale(1.05)'">
             <div id="erroAuth" class="msg-erro" style="display: none; color: red; margin-top: 15px;">⚠️ ID ou Senha incorretos!</div>
         </div>
     </div>
-
+<!--🔒🔒🔒🔒🔒🔒🔒🔒🔒🔒⬆⬆⬆⬆⬆⬆⬆-->
+        
     <div class="modal-admin" id="modalAdmin">
         <div class="modal-content">
             <h2>🛡️ Cadastro de Participantes</h2>
@@ -731,7 +734,7 @@ onmouseup="this.style.transform='scale(1.05)'">
             }
         }
 
-        // 🔒 Sistema de Validação Segura via JSONP
+        // 🔒🔒⬇⬇⬇⬇⬇ Sistema de Validação Segura via JSONP - ID e SENHA ⬇⬇⬇⬇⬇🔒🔒
         function validarAcessoPainel() {
             const usuarioInput = document.getElementById('authID').value.trim();
             const senhaInput = document.getElementById('authSenha').value.trim();
@@ -794,6 +797,7 @@ onmouseup="this.style.transform='scale(1.05)'">
                 });
             }
         });
+        //🔒🔒🔒🔒⬆⬆⬆⬆⬆        
 
         function fecharAvisoLista() {
             document.getElementById('modalAvisoLista').style.display = 'none';
@@ -801,7 +805,7 @@ onmouseup="this.style.transform='scale(1.05)'">
 
         function prosseguirParaAdmin() {
             fecharAvisoLista();
-            solicitarSenhaAdmin('painel');
+            abrirAdmin();
         }
 
         function cancelarAvisoLista() {
