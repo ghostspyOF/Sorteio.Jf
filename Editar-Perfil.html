@@ -596,14 +596,12 @@
 
 <script>
     // 🔒 Trava de Segurança com Backend Corrigida
-        // 🔒 Sistema de Validação Direta com o Google (Atualizado para evitar CORS)
-async function validarAcessoPainel() {
+    // 🔒 Sistema de Validação Segura via JSONP
+function validarAcessoPainel() {
     const usuarioInput = document.getElementById('authID').value.trim();
     const senhaInput = document.getElementById('authSenha').value.trim();
     const divErro = document.getElementById('erroAuth');
-    const telaBloqueio = document.getElementById('bloqueio-seguranca');
 
-    // Link oficial da sua implantação
     const urlBackend = "https://script.google.com/macros/s/AKfycbxnFPcHlGE0qldY0LBW1YEwRyyNt9Oeh_NqAXEnjM2srfwgvElum5JmfSYmPqP6NzhJZA/exec";
 
     if (!usuarioInput || !senhaInput) {
@@ -611,29 +609,40 @@ async function validarAcessoPainel() {
         return;
     }
 
-    const parametros = "?" + `usuario=${encodeURIComponent(usuarioInput)}&senha=${encodeURIComponent(senhaInput)}`;
-
-    try {
-        // 🛡️ Alterado para mode: 'no-cors' para o navegador permitir a requisição externa
-        const resposta = await fetch(urlBackend + parametros, {
-            method: 'GET',
-            mode: 'no-cors',
-            redirect: 'follow'
-        });
-
-        // Como o modo 'no-cors' limita a leitura da resposta por segurança,
-        // vamos assumir que se a requisição foi enviada com sucesso (status tipo opaque),
-        // nós validamos localmente ou permitimos a entrada se o backend processou.
-        // Se você configurou para redirecionar ou salvar, o Google já recebeu.
+    // Criamos uma função global temporária para receber a resposta do Google
+    const nomeCallback = 'meuCallbackOuvinte_' + Math.round(Math.random() * 1000000);
+    
+    window[nomeCallback] = function(resultado) {
+        const telaBloqueio = document.getElementById('bloqueio-seguranca');
         
-        // Para testes imediatos de liberação da tela:
-        if (telaBloqueio) telaBloqueio.style.display = 'none';
-        if (divErro) divErro.style.display = 'none';
+        if (resultado && resultado.autorizado === true) {
+            if (telaBloqueio) telaBloqueio.style.display = 'none';
+            if (divErro) divErro.style.display = 'none';
+        } else {
+            if (divErro) divErro.style.display = 'block';
+            document.getElementById('authSenha').value = '';
+        }
+        
+        // Limpeza de segurança após validar
+        document.body.removeChild(scriptElemento);
+        delete window[nomeCallback];
+    };
 
-    } catch (erro) {
-        console.error("Erro na comunicação:", erro);
-        alert("Erro de autenticação: Verifique sua conexão ou tente novamente.");
-    }
+    // Monta a requisição com os parâmetros e o callback de segurança
+    const parametros = `?usuario=${encodeURIComponent(usuarioInput)}&senha=${encodeURIComponent(senhaInput)}&callback=${nomeCallback}`;
+    
+    // Injeta o pedido de forma que o CORS permita a leitura da resposta
+    const scriptElemento = document.createElement('script');
+    scriptElemento.src = urlBackend + parametros;
+    
+    scriptElemento.onerror = function() {
+        alert("Erro de autenticação: Verifique sua conexão ou a configuração do script.");
+        if (divErro) divErro.style.display = 'block';
+        document.body.removeChild(scriptElemento);
+        delete window[nomeCallback];
+    };
+
+    document.body.appendChild(scriptElemento);
 }
 
 // Atalho para o botão Enter
@@ -743,6 +752,7 @@ function closeModal(suffix) {
     const modal = document.getElementById('editModal' + suffix);
     if(modal) modal.style.display = 'none'; 
 }
+
 
 
 
