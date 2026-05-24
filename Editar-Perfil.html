@@ -611,11 +611,11 @@ async function validarAcessoPainel() {
         return;
     }
 
-    // ✨ CORREÇÃO: Aspas adicionadas para evitar o erro de sintaxe que travava o botão
-    const parametros = "?" + usuario=${encodeURIComponent(usuarioInput)}&senha=${encodeURIComponent(senhaInput)};
+    // ✨ CORREÇÃO: Aspas adicionadas para o navegador processar a URL sem travar
+    const parametros = "?" + `usuario=${encodeURIComponent(usuarioInput)}&senha=${encodeURIComponent(senhaInput)}`;
 
     try {
-        // Método GET com redirecionamento automático para evitar bloqueios do navegador
+        // Método GET com redirecionamento automático para evitar bloqueios de segurança
         const resposta = await fetch(urlBackend + parametros, {
             method: 'GET',
             redirect: 'follow'
@@ -644,7 +644,7 @@ document.getElementById('authSenha').addEventListener('keypress', function (e) {
     }
 });
 
-// 📊 Variáveis globais e funções do sistema de edição
+// 📊 Variáveis globais e funções do sistema de edição (Mantidas intactas)
 let currentWrapper = null;
 let currentTarget = null;
 let currentType = 'text';
@@ -736,7 +736,7 @@ function ejecutarAcao() {
         fetch(formUrl, { method: "POST", mode: "no-cors", body: formData });
     }
     
-    closeModal(currentModalId);
+    closeModal(currentWrapper ? currentModalId : '');
 }
 
 function closeModal(suffix) { 
@@ -744,6 +744,8 @@ function closeModal(suffix) {
     const modal = document.getElementById('editModal' + suffix);
     if(modal) modal.style.display = 'none'; 
 }
+
+
 </script>
 
 </body>
