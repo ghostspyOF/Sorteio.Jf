@@ -1021,6 +1021,7 @@ onmouseup="this.style.transform='scale(1.05)'">
 
     <script>
         // Criamos a variável onde o número do sorteio vai ficar guardado
+// Criamos a variável onde o número do sorteio vai ficar guardado
 window.quantidadeNumerosSorteio = 1000; // Valor padrão de segurança
 window.chavePixPlanilha = "0000000000"; // Chave PIX padrão de segurança caso a planilha falhe
 
@@ -1033,9 +1034,7 @@ window.chavePixPlanilha = "0000000000"; // Chave PIX padrão de segurança caso 
             const textoBruto = await resposta.text();
             const linhas = textoBruto.split(/\r?\n/);
 
-                // --- CORREÇÃO AQUI ---
-                // Descobre se o separador principal é ; ou ,
-                                       linhas.forEach(linha => {
+            linhas.forEach(linha => {
                 if (!linha.trim()) return;
 
                 // Detecta se o separador configurado no Sheets é ; ou ,
@@ -1093,32 +1092,31 @@ window.chavePixPlanilha = "0000000000"; // Chave PIX padrão de segurança caso 
                         return;
                     }
 
-                                        const elemento = document.getElementById(idElemento);
+                    // --- ATUALIZAÇÃO DOS ELEMENTOS DO HTML ---
+                    const elemento = document.getElementById(idElemento);
 
                     if (elemento) {
                         const tag = elemento.tagName.toLowerCase();
                         
                         if (tag === 'img') {
-                            // Se o ID for uma imagem, muda a foto
+                            // Se o ID for uma imagem, muda a foto (link da planilha vai para o src)
                             elemento.src = conteudo;
                             console.log(`Sucesso: Imagem ${idElemento} atualizada com: ${conteudo}`);
                         } else if (tag === 'a') {
-                            // Se o ID for um link (<a>), muda o destino do clique
+                            // Se o ID for um link, muda o destino do clique (link da planilha vai para o href)
                             elemento.href = conteudo;
                             console.log(`Sucesso: Link de destino ${idElemento} atualizado com: ${conteudo}`);
                         } else {
-                            // Para qualquer outro elemento (p, span, div, h1), muda o texto
+                            // Para qualquer outro elemento (p, span, div, h1), muda o texto de dentro
                             elemento.textContent = conteudo;
                             console.log(`Sucesso: Texto ${idElemento} atualizado com: ${conteudo}`);
                         }
                     } else {
                         console.warn(`ID não encontrado no HTML: ${idElemento}`);
                     }
+                }
+            });
 
-
-
-
-            
         } catch (e) {
             console.error("Erro ao carregar planilha:", e);
         }
@@ -1130,7 +1128,6 @@ window.chavePixPlanilha = "0000000000"; // Chave PIX padrão de segurança caso 
         atualizarSite();
     }
 })();
-
 
 
        
