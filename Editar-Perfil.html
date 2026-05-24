@@ -612,12 +612,12 @@
     }
 
     try {
-        // Envia o ID e a Senha para o seu Backend de forma segura
+        // Envia o ID e a Senha para o seu Backend
         const resposta = await fetch(urlBackend, {
             method: 'POST',
-            mode: 'cors', // Permite comunicação entre domínios diferentes
+            // Mudamos o Content-Type para text/plain para o Google aceitar sem bloquear a conexão
             headers: {
-                'Content-Type': 'text/plain;charset=utf-8', // O Apps Script lê melhor assim do celular
+                'Content-Type': 'text/plain;charset=utf-8'
             },
             body: JSON.stringify({
                 usuario: usuarioInput,
