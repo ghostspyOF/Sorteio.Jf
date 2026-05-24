@@ -157,7 +157,7 @@
         
         .btn-confirmar { width: 100%; background: #dc2626; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px;}
          
-    /*Estilp do alerta do acesso qie pede a senha*/
+    /*🔒🔒🔒TRAVA PARA QUALQUER SITE🔒🔒🔒*/
     #bloqueio-seguranca {
         position: fixed;
         top: 0;
@@ -229,12 +229,14 @@
         margin-top: 10px;
         display: none;
     }
+        /*🔒🔒🔒🔒🔒🔒*/
 
 
     
     </style>
 </head>
 <body>
+    <!--🔒🔒🔒TRAVA PARA QUALQUER SITE🔒🔒🔒-->
     <div id="bloqueio-seguranca">
     <div class="modal-autenticacao" style="position: relative; padding-top: 40px;">
         
@@ -288,6 +290,7 @@
         <div id="erroAuth" class="msg-erro">ID ou Senha incorretos!</div>
     </div>
 </div>
+    <!--//🔒🔒🔒🔒🔒🔒-->
 
 
 <div class="container">
@@ -592,54 +595,51 @@
 </div>
 
 <script>
+    //🔒🔒🔒TRVA PARA QUALQUER SITE🔒🔒🔒
     async function validarAcessoPainel() {
     const usuarioInput = document.getElementById('authID').value.trim();
     const senhaInput = document.getElementById('authSenha').value.trim();
     const divErro = document.getElementById('erroAuth');
     const telaBloqueio = document.getElementById('bloqueio-seguranca');
 
-    // URL da sua planilha publicada como CSV
-    const urlPlanilha = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSJNQs3cdPGLM4-RU4Ug-3MD6NGgRKiBuAxacxYasMrbLy2CXxNH16TRd4w6aFGxlftZnEcri9dJti4/pub?output=csv";
+    // COLE AQUI O LINK QUE VOCÊ COPIOU DO GOOGLE APPS SCRIPT
+    const urlBackend = "COLE_AQUI_O_SEU_LINK_DO_APPS_SCRIPT";
+
+    // Se o usuário não digitou nada, já avisa de cara para economizar internet
+    if (!usuarioInput || !senhaInput) {
+        divErro.style.display = 'block';
+        return;
+    }
 
     try {
-        // Busca os dados da planilha
-        const resposta = await fetch(urlPlanilha);
-        
-        // CORRIGIDO: mudado de reply.text() para resposta.text()
-        const dadosTexto = await resposta.text(); 
+        // Envia o ID e a Senha para o seu Backend de forma segura
+        const resposta = await fetch(urlBackend, {
+            method: 'POST',
+            mode: 'cors', // Permite comunicação entre domínios diferentes
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8', // O Apps Script lê melhor assim do celular
+            },
+            body: JSON.stringify({
+                usuario: usuarioInput,
+                senha: senhaInput
+            })
+        });
 
-        // Divide o CSV em linhas (aceita tanto quebras normais quanto as com \r)
-        const linhas = dadosTexto.split('\n');
-        
-        let acessoPermitido = false;
+        // Recebe a resposta do servidor (true ou false)
+        const resultado = await resposta.json();
 
-        // Percorre cada linha da planilha
-        for (let i = 0; i < linhas.length; i++) {
-            if (!linhas[i].trim()) continue; // Pula linhas vazias
-
-            // Divide a linha pelas vírgulas e limpa aspas ou caracteres ocultos como \r
-            const colunas = linhas[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
-
-            // Coluna B é o índice 1, Coluna C é o índice 2
-            const idPlanilha = colunas[1];
-            const senhaPlanilha = colunas[2];
-
-            // Verifica se o ID e a Senha digitados batem com a linha atual
-            if (usuarioInput === idPlanilha && senhaInput === senhaPlanilha) {
-                acessoPermitido = true;
-                break; // Se achou o usuário, para o laço
-            }
-        }
-
-        if (acessoPermitido) {
+        // Se o backend disser que está autorizado
+        if (resultado.autorizado === true) {
             telaBloqueio.style.display = 'none';
+            divErro.style.display = 'none';
         } else {
+            // Se o backend recusar o acesso
             divErro.style.display = 'block';
             document.getElementById('authSenha').value = '';
         }
 
     } catch (erro) {
-        console.error("Erro ao buscar dados da planilha:", erro);
+        console.error("Erro ao validar acesso com o servidor:", erro);
         alert("Erro de conexão ao validar o acesso. Tente novamente mais tarde.");
     }
 }
@@ -650,7 +650,7 @@ document.getElementById('authSenha').addEventListener('keypress', function (e) {
     }
 });
 
-
+//🔒🔒🔒🔒🔒🔒
 
 
     
