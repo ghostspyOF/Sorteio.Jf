@@ -607,18 +607,58 @@ onmouseup="this.style.transform='scale(1.05)'">
         </div>
     </div>
 
-    <div class="modal-admin" id="modalSenhaAdmin">
-        <div class="modal-content card-senha">
-            <h2>🔒 Área Restrita</h2>
-            <p style="font-size: 0.9rem; color: #4a5568; margin-bottom: 15px;">Informe a credencial de segurança para acessar o painel.</p>
-            <input type="password" id="campoSenhaAdmin" placeholder="Digite a senha..." onkeydown="if(event.key === 'Enter') validarSenhaAdmin()">
-            <div class="msg-erro-senha" id="erroSenhaAdmin">⚠️ Senha incorreta! Tente novamente.</div>
-            <div class="modal-botoes" style="margin-top: 20px;">
-                <button class="btn-fechar" onclick="fecharModalSenha()">Cancelar</button>
-                <button class="btn-acessar" onclick="validarSenhaAdmin()">Acessar</button>
-            </div>
-        </div>
+    <div id="bloqueio-seguranca" style="display: none;"> <div class="modal-autenticacao" style="position: relative; padding-top: 40px;">
+        
+        <a href="javascript:void(0)" 
+           onclick="document.getElementById('bloqueio-seguranca').style.display='none'"
+           style="position: absolute; 
+                  top: 15px; 
+                  right: 15px; 
+                  color: #dc2626; 
+                  text-decoration: none; 
+                  font-family: Arial, sans-serif; 
+                  font-size: 40px; 
+                  font-weight: bold; 
+                  line-height: 1; 
+                  cursor: pointer;
+                  transition: transform 0.2s;"
+           onmouseover="this.style.transform='scale(1.2)'" 
+           onmouseout="this.style.transform='scale(1)'"
+           title="Cancelar">
+            &times;
+        </a>
+
+        <h2 style="font-size: 40px;">Área Restrita</h2>
+        <p>Insira suas credenciais para gerenciar o site</p>
+        
+        <input type="text" id="authID" class="campo-autenticacao" placeholder="Digite o ID de usuário">
+        <input type="password" id="authSenha" class="campo-autenticacao" placeholder="Digite a senha">
+        
+        <button type="button" class="btn-acessar" onclick="validarAcessoPainel()">ENTRAR</button><br>
+        
+        <a href="https://api.whatsapp.com/send?phone=5562995679219&text=Eu%20gostaria%20de%20saber%20a%20senha%20para%20editar%20o%20site" 
+           target="_blank" 
+           style="display: inline-block; 
+                  margin-top: 20px; 
+                  padding: 12px 24px; 
+                  background: linear-gradient(135deg, #25D366, #128C7E); 
+                  color: white; 
+                  text-decoration: none; 
+                  font-family: 'Segoe UI', sans-serif; 
+                  font-size: 14px; 
+                  font-weight: bold; 
+                  border-radius: 50px; 
+                  text-transform: uppercase; 
+                  letter-spacing: 0.5px; 
+                  box-shadow: 0 0 15px #25D366, 0 0 30px rgba(37, 211, 102, 0.4); 
+                  transition: all 0.3s ease; 
+                  animation: brilhoPulsante 1.5s infinite alternate;">
+            Esqueci a senha
+        </a>
+        
+        <div id="erroAuth" class="msg-erro" style="display: none; color: red; margin-top: 15px;">⚠️ ID ou Senha incorretos!</div>
     </div>
+</div>
 
     <div class="modal-admin" id="modalAdmin">
         <div class="modal-content">
@@ -636,28 +676,85 @@ onmouseup="this.style.transform='scale(1.05)'">
         let bancoParticipantes = {};
 
         // Inicia o processo de verificação com o belo modal customizado
-        function solicitarSenhaAdmin() {
-            document.getElementById('campoSenhaAdmin').value = '';
-            document.getElementById('erroSenhaAdmin').style.display = 'none';
-            document.getElementById('modalSenhaAdmin').style.display = 'flex';
-            setTimeout(() => document.getElementById('campoSenhaAdmin').focus(), 50);
-        }
+       // Abre o novo modal de segurança
+function solicitarSenhaAdmin() {
+    // Limpa os campos antes de abrir
+    if (document.getElementById('authID')) document.getElementById('authID').value = '';
+    if (document.getElementById('authSenha')) document.getElementById('authSenha').value = '';
+    if (document.getElementById('erroAuth')) document.getElementById('erroAuth').style.display = 'none';
+    
+    // Exibe a tela de bloqueio
+    const telaBloqueio = document.getElementById('bloqueio-seguranca');
+    if (telaBloqueio) {
+        telaBloqueio.style.display = 'flex'; // ou 'block', dependendo do seu layout
+        setTimeout(() => document.getElementById('authID').focus(), 50);
+    }
+}
 
-        function fecharModalSenha() {
-            document.getElementById('modalSenhaAdmin').style.display = 'none';
-        }
+// 🔒 Sistema de Validação Segura via JSONP
+function validarAcessoPainel() {
+    const usuarioInput = document.getElementById('authID').value.trim();
+    const senhaInput = document.getElementById('authSenha').value.trim();
+    const divErro = document.getElementById('erroAuth');
 
-        function validarSenhaAdmin() {
-            const senhaDigitada = document.getElementById('campoSenhaAdmin').value;
+    const urlBackend = "https://script.google.com/macros/s/AKfycbxnFPcHlGE0qldY0LBW1YEwRyyNt9Oeh_NqAXEnjM2srfwgvElum5JmfSYmPqP6NzhJZA/exec";
+
+    if (!usuarioInput || !senhaInput) {
+        if (divErro) divErro.style.display = 'block';
+        return;
+    }
+
+    // Criamos uma função global temporária para receber a resposta do Google
+    const nomeCallback = 'meuCallbackOuvinte_' + Math.round(Math.random() * 1000000);
+    
+    window[nomeCallback] = function(resultado) {
+        const telaBloqueio = document.getElementById('bloqueio-seguranca');
+        
+        if (resultado && resultado.autorizado === true) {
+            if (telaBloqueio) telaBloqueio.style.display = 'none';
+            if (divErro) divErro.style.display = 'none';
             
-            if (senhaDigitada === 'Rif@D') {
-                fecharModalSenha();
-                abrirAdmin();
-            } else {
-                document.getElementById('erroSenhaAdmin').style.display = 'block';
-                document.getElementById('campoSenhaAdmin').focus();
-            }
+            // 🔥 CHAMA A SUA FUNÇÃO ORIGINAL QUE ABRE O PAINEL
+            abrirAdmin(); 
+        } else {
+            if (divErro) divErro.style.display = 'block';
+            document.getElementById('authSenha').value = '';
+            document.getElementById('authSenha').focus();
         }
+        
+        // Limpeza de segurança após validar
+        document.body.removeChild(scriptElemento);
+        delete window[nomeCallback];
+    };
+
+    // Monta a requisição com os parâmetros e o callback de segurança
+    const parametros = ?usuario=${encodeURIComponent(usuarioInput)}&senha=${encodeURIComponent(senhaInput)}&callback=${nomeCallback};
+    
+    // Injeta o pedido de forma que o CORS permita a leitura da resposta
+    const scriptElemento = document.createElement('script');
+    scriptElemento.src = urlBackend + parametros;
+    
+    scriptElemento.onerror = function() {
+        alert("Erro de autenticação: Verifique sua conexão ou a configuração do script.");
+        if (divErro) divErro.style.display = 'block';
+        document.body.removeChild(scriptElemento);
+        delete window[nomeCallback];
+    };
+
+    document.body.appendChild(scriptElemento);
+}
+
+// Vincula o evento do Enter após o carregamento da página
+document.addEventListener("DOMContentLoaded", function() {
+    const campoSenha = document.getElementById('authSenha');
+    if (campoSenha) {
+        campoSenha.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                validarAcessoPainel();
+            }
+        });
+    }
+});
 
         // Funções para controlar o novo modal de aviso
         function fecharAvisoLista() {
