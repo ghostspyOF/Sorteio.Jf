@@ -1038,19 +1038,24 @@ window.chavePixPlanilha = "0000000000"; // Chave PIX padrão de segurança caso 
 
                 // --- CORREÇÃO AQUI ---
                 // Descobre se o separador principal é ; ou ,
+                            linhas.forEach(linha => {
+                if (!linha.trim()) return;
+
+                // Detecta se o separador é ponto e vírgula ou vírgula
                 const sep = linha.includes(';') ? ';' : ',';
-                
-                // Divide apenas na PRIMEIRA ocorrência do separador
-                const indexSeparador = linha.indexOf(sep);
-                if (indexSeparador === -1) return;
 
-                const idElemento = linha.substring(0, indexSeparador).replace(/['"]/g, '').trim();
-                let conteudo = linha.substring(indexSeparador + 1).replace(/['"]/g, '').trim();
-                // ---------------------
+                // Expressão regular mágica para separar as colunas respeitando as aspas do CSV
+                const regex = new RegExp(`(text)?([^"${sep}]+|"[^"]*")`, 'g');
+                const colunas = linha.match(regex) || [];
 
-                // Daqui para baixo o código continua exatamente igual ao seu
-                if (idElemento && conteudo !== undefined) {
-                    
+                if (colunas.length >= 2) {
+                    // Limpa as aspas extras das duas primeiras colunas e remove espaços em branco nas pontas
+                    const idElemento = colunas[0].replace(/^["']|["']$/g, '').trim();
+                    let conteudo = colunas[1].replace(/^["']|["']$/g, '').trim();
+
+                    // Se o idElemento ou conteudo ficarem vazios após a limpeza, ignora
+                    if (!idElemento) return;
+
                     // --- CONFIGURAÇÃO: QUANTIDADE DE NÚMEROS ---
                     if (idElemento === "CONFIG_QUANTIDADE_NUMEROS") {
                         window.quantidadeNumerosSorteio = parseInt(conteudo, 10) || 1000;
@@ -1082,16 +1087,17 @@ window.chavePixPlanilha = "0000000000"; // Chave PIX padrão de segurança caso 
                     if (elemento) {
                         if (elemento.tagName.toLowerCase() === 'img') {
                             elemento.src = conteudo;
-                            console.log(`Sucesso: Imagem ${idElemento} updated com: ${conteudo}`);
+                            console.log(`Sucesso: Imagem ${idElemento} atualizada com: ${conteudo}`);
                         } else {
                             elemento.textContent = conteudo;
-                            console.log(`Sucesso: Texto ${idElemento} updated com: ${conteudo}`);
+                            console.log(`Sucesso: Texto ${idElemento} atualizado com: ${conteudo}`);
                         }
                     } else {
                         console.warn(`ID não encontrado no HTML: ${idElemento}`);
                     }
                 }
             });
+
 
 
             
