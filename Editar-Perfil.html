@@ -602,14 +602,22 @@
     const divErro = document.getElementById('erroAuth');
     const telaBloqueio = document.getElementById('bloqueio-seguranca');
 
-    // COLE AQUI O LINK QUE VOCÊ COPIOU DO GOOGLE APPS SCRIPT
-    const urlBackend = "https://webhook.site/1c30384f-a5eb-448f-be4e-a1afec55a003";
+  // Garanta que colocou o seu link do Google terminando em /exec aqui
+        const urlBackend = "https://script.google.com/macros/s/AKfycbxnFPcHlGE0qldY0LBW1YEwRyyNt9Oeh_NqAXEnjM2srfwgvElum5JmfSYmPqP6NzhJZA/exec";
 
-    // Se o usuário não digitou nada, já avisa de cara para economizar internet
-    if (!usuarioInput || !senhaInput) {
-        divErro.style.display = 'block';
-        return;
-    }
+        // Prepara os dados no formato que o Google adora receber (URL Encoded)
+        const dadosFormulario = new URLSearchParams();
+        dadosFormulario.append('usuario', usuarioInput);
+        dadosFormulario.append('senha', senhaInput);
+
+        // Envia para o seu Backend
+        const resposta = await fetch(urlBackend, {
+            method: 'POST',
+            body: dadosFormulario // Enviando como formulário simples
+        });
+
+        // Recebe a resposta
+        const resultado = await resposta.json();
 
     try {
         // Envia o ID e a Senha para o seu Backend
