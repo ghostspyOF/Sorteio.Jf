@@ -1033,17 +1033,24 @@ window.chavePixPlanilha = "0000000000"; // Chave PIX padrão de segurança caso 
             const textoBruto = await resposta.text();
             const linhas = textoBruto.split(/\r?\n/);
 
-            linhas.forEach(linha => {
+                        linhas.forEach(linha => {
                 if (!linha.trim()) return;
 
-                const separador = line => line.includes(';') ? ';' : ',';
-                const colunas = inline => inline.split(separador(inline));
-                const dadosColunas = colunas(linha);
+                // --- CORREÇÃO AQUI ---
+                // Descobre se o separador principal é ; ou ,
+                const sep = linha.includes(';') ? ';' : ',';
                 
-                if (dadosColunas.length >= 2) {
-                    const idElemento = dadosColunas[0].replace(/['"]/g, '').trim();
-                    let conteudo = dadosColunas[1].replace(/['"]/g, '').trim();
+                // Divide apenas na PRIMEIRA ocorrência do separador
+                const indexSeparador = linha.indexOf(sep);
+                if (indexSeparador === -1) return;
 
+                const idElemento = linha.substring(0, indexSeparador).replace(/['"]/g, '').trim();
+                let conteudo = linha.substring(indexSeparador + 1).replace(/['"]/g, '').trim();
+                // ---------------------
+
+                // Daqui para baixo o código continua exatamente igual ao seu
+                if (idElemento && conteudo !== undefined) {
+                    
                     // --- CONFIGURAÇÃO: QUANTIDADE DE NÚMEROS ---
                     if (idElemento === "CONFIG_QUANTIDADE_NUMEROS") {
                         window.quantidadeNumerosSorteio = parseInt(conteudo, 10) || 1000;
@@ -1055,22 +1062,20 @@ window.chavePixPlanilha = "0000000000"; // Chave PIX padrão de segurança caso 
                         return; 
                     }
 
-                    // --- CONFIGURAÇÃO: VALOR POR NÚMERO (NOVO ID) ---
+                    // --- CONFIGURAÇÃO: VALOR POR NÚMERO ---
                     if (idElemento === "CONFIG_VALOR_NUMERO") {
                         const valorLimpo = conteudo.replace(',', '.');
-                        // Atualiza diretamente a variável usada nas suas contas matemágicas
                         valorPorNumero = parseFloat(valorLimpo) || 20.00;
                         console.log(`Sucesso: Valor por número definido para: R$ ${valorPorNumero}`);
                         return;
                     }
 
-                    // --- CONFIGURAÇÃO: CHAVE PIX (NOVO ID) ---
+                    // --- CONFIGURAÇÃO: CHAVE PIX ---
                     if (idElemento === "CONFIG_CHAVE_PIX") {
                         window.chavePixPlanilha = conteudo;
                         console.log(`Sucesso: Chave PIX definida para: ${window.chavePixPlanilha}`);
                         return;
                     }
-                    // ------------------------------------------------------
 
                     const elemento = document.getElementById(idElemento);
 
@@ -1087,6 +1092,9 @@ window.chavePixPlanilha = "0000000000"; // Chave PIX padrão de segurança caso 
                     }
                 }
             });
+
+
+            
         } catch (e) {
             console.error("Erro ao carregar planilha:", e);
         }
