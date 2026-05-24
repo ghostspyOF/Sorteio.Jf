@@ -634,7 +634,16 @@ onmouseup="this.style.transform='scale(1.05)'">
 
         <button class="btn-admin" onclick="solicitarSenhaAdmin('painel')">🛡️ Painel Admin</button>
 
-    
+    <div class="modal-admin" id="modalAvisoLista">
+        <div class="modal-content card-aviso">
+            <h2>⚠️ Lista de Participantes Vazia</h2>
+            <p style="font-size: 0.95rem; color: #4a5568; margin-bottom: 20px; line-height: 1.5;">Por favor, cadastre a lista de participantes no Painel Admin antes de iniciar o Sorteio Oficial.</p>
+            <div class="modal-botoes" style="justify-content: center; gap: 15px;">
+                <button class="btn-fechar" onclick="cancelarAvisoLista()">Cancelar</button>
+                <button class="btn-prosseguir">Cadastrar Lista</button>
+            </div>
+        </div>
+    </div>
 
     <div id="bloqueio-seguranca" style="display: none;"> 
         <div class="modal-autenticacao" style="position: relative; padding-top: 40px;">
