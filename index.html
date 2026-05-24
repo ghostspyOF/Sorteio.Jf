@@ -1096,22 +1096,28 @@ window.chavePixPlanilha = "0000000000"; // Chave PIX padrão de segurança caso 
                         return;
                     }
 
-                    const elemento = document.getElementById(idElemento);
+                                        const elemento = document.getElementById(idElemento);
 
                     if (elemento) {
-                        if (elemento.tagName.toLowerCase() === 'img') {
-                            elemento.src = conteudo; // Aqui o link da imagem vai funcionar perfeitamente
+                        const tag = elemento.tagName.toLowerCase();
+                        
+                        if (tag === 'img') {
+                            // Se o ID for uma imagem, muda a foto
+                            elemento.src = conteudo;
                             console.log(`Sucesso: Imagem ${idElemento} atualizada com: ${conteudo}`);
+                        } else if (tag === 'a') {
+                            // Se o ID for um link (<a>), muda o destino do clique
+                            elemento.href = conteudo;
+                            console.log(`Sucesso: Link de destino ${idElemento} atualizado com: ${conteudo}`);
                         } else {
+                            // Para qualquer outro elemento (p, span, div, h1), muda o texto
                             elemento.textContent = conteudo;
                             console.log(`Sucesso: Texto ${idElemento} atualizado com: ${conteudo}`);
                         }
                     } else {
                         console.warn(`ID não encontrado no HTML: ${idElemento}`);
                     }
-                }
-            });
- 
+
 
 
 
