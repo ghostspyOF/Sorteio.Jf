@@ -592,10 +592,9 @@
 </div>
 
 <script>
-    
     async function validarAcessoPainel() {
-    const usuarioInput = document.getElementById('authID').value;
-    const senhaInput = document.getElementById('authSenha').value;
+    const usuarioInput = document.getElementById('authID').value.trim();
+    const senhaInput = document.getElementById('authSenha').value.trim();
     const divErro = document.getElementById('erroAuth');
     const telaBloqueio = document.getElementById('bloqueio-seguranca');
 
@@ -605,20 +604,23 @@
     try {
         // Busca os dados da planilha
         const resposta = await fetch(urlPlanilha);
-        const dadosTexto = await reply.text();
+        
+        // CORRIGIDO: mudado de reply.text() para resposta.text()
+        const dadosTexto = await resposta.text(); 
 
-        // Divide o CSV em linhas
+        // Divide o CSV em linhas (aceita tanto quebras normais quanto as com \r)
         const linhas = dadosTexto.split('\n');
         
         let acessoPermitido = false;
 
         // Percorre cada linha da planilha
         for (let i = 0; i < linhas.length; i++) {
-            // Divide a linha pelas vírgulas (colunas)
-            // .map(c => c.trim().replace(/^"|"$/g, '')) remove espaços e aspas extras que o Google Sheets costuma colocar
+            if (!linhas[i].trim()) continue; // Pula linhas vazias
+
+            // Divide a linha pelas vírgulas e limpa aspas ou caracteres ocultos como \r
             const colunas = linhas[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
 
-            // Coluna B é o índice 1, Coluna C é o índice 2 (JavaScript começa no 0)
+            // Coluna B é o índice 1, Coluna C é o índice 2
             const idPlanilha = colunas[1];
             const senhaPlanilha = colunas[2];
 
@@ -647,6 +649,8 @@ document.getElementById('authSenha').addEventListener('keypress', function (e) {
         validarAcessoPainel();
     }
 });
+
+
 
 
     
