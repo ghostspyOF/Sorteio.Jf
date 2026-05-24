@@ -596,12 +596,14 @@
 
 <script>
     // 🔒 Trava de Segurança com Backend Corrigida
+    // 🔒 Sistema de Validação Direta com o Google
 async function validarAcessoPainel() {
     const usuarioInput = document.getElementById('authID').value.trim();
     const senhaInput = document.getElementById('authSenha').value.trim();
     const divErro = document.getElementById('erroAuth');
     const telaBloqueio = document.getElementById('bloqueio-seguranca');
 
+    // Link oficial da sua implantação
     const urlBackend = "https://script.google.com/macros/s/AKfycbxnFPcHlGE0qldY0LBW1YEwRyyNt9Oeh_NqAXEnjM2srfwgvElum5JmfSYmPqP6NzhJZA/exec";
 
     if (!usuarioInput || !senhaInput) {
@@ -609,45 +611,40 @@ async function validarAcessoPainel() {
         return;
     }
 
-    try {
-        // Prepara os dados no formato que o Google Apps Script lê perfeitamente
-        const dadosFormulario = new URLSearchParams();
-        dadosFormulario.append('usuario', usuarioInput);
-        dadosFormulario.append('senha', senhaInput);
+    // Criamos os parâmetros limpos para a URL
+    const parametros = ?usuario=${encodeURIComponent(usuarioInput)}&senha=${encodeURIComponent(senhaInput)};
 
-        // Faz a requisição direta permitindo a leitura do resultado
-        const resposta = await fetch(urlBackend, {
-            method: 'POST',
-            body: dadosFormulario
+    try {
+        // Mudamos para o método GET com redirecionamento automático, que elimina o erro de conexão
+        const resposta = await fetch(urlBackend + parametros, {
+            method: 'GET',
+            redirect: 'follow'
         });
 
-        // Converte a resposta do servidor para objeto
         const resultado = await resposta.json();
 
-        // Verifica se o backend deu o sinal verde
         if (resultado.autorizado === true) {
             if (telaBloqueio) telaBloqueio.style.display = 'none';
             if (divErro) divErro.style.display = 'none';
         } else {
-            // Se o ID ou Senha estiverem errados na planilha
             if (divErro) divErro.style.display = 'block';
             document.getElementById('authSenha').value = '';
         }
 
     } catch (erro) {
-        console.error("Erro interno:", erro);
-        alert("Erro ao conectar com o servidor: " + erro.message);
+        console.error("Erro na comunicação:", erro);
+        alert("Erro de autenticação: Verifique sua conexão ou tente novamente.");
     }
 }
 
-// Atalho para funcionar ao apertar Enter
+// Atalho para o botão Enter
 document.getElementById('authSenha').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         validarAcessoPainel();
     }
 });
 
-// 📊 Variáveis globais do sistema de edição
+// 📊 Variáveis globais e funções do sistema de edição (Mantidas intactas)
 let currentWrapper = null;
 let currentTarget = null;
 let currentType = 'text';
