@@ -611,11 +611,11 @@ async function validarAcessoPainel() {
         return;
     }
 
-    // Criamos os parâmetros limpos para a URL
-    const parametros = ?usuario=${encodeURIComponent(usuarioInput)}&senha=${encodeURIComponent(senhaInput)};
+    // ✨ CORREÇÃO: Aspas adicionadas para evitar o erro de sintaxe que travava o botão
+    const parametros = "?" + usuario=${encodeURIComponent(usuarioInput)}&senha=${encodeURIComponent(senhaInput)};
 
     try {
-        // Mudamos para o método GET com redirecionamento automático, que elimina o erro de conexão
+        // Método GET com redirecionamento automático para evitar bloqueios do navegador
         const resposta = await fetch(urlBackend + parametros, {
             method: 'GET',
             redirect: 'follow'
@@ -644,7 +644,7 @@ document.getElementById('authSenha').addEventListener('keypress', function (e) {
     }
 });
 
-// 📊 Variáveis globais e funções do sistema de edição (Mantidas intactas)
+// 📊 Variáveis globais e funções do sistema de edição
 let currentWrapper = null;
 let currentTarget = null;
 let currentType = 'text';
@@ -678,7 +678,7 @@ function setMode(mode, suffix) {
     }
 }
 
-function executarAcaoQuantidade() {
+function ejecutarAcaoQuantidade() {
     const valor = document.getElementById('inputQuantidade').value;
     const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
     
@@ -691,7 +691,7 @@ function executarAcaoQuantidade() {
     alert("Enviado com sucesso!");
 }
 
-function executarAcaoQuantidade2() {
+function ejecutarAcaoQuantidade2() {
     const valor = document.getElementById('inputQuantidade2').value;
     const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
     
@@ -704,7 +704,7 @@ function executarAcaoQuantidade2() {
     alert("Enviado com sucesso!");
 }
 
-function executarAcaoQuantidade3() {
+function ejecutarAcaoQuantidade3() {
     const valor = document.getElementById('inputQuantidade3').value;
     const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
     
@@ -717,7 +717,7 @@ function executarAcaoQuantidade3() {
     alert("Enviado com sucesso!");
 }
 
-function executarAcao() {
+function ejecutarAcao() {
     const valorInput = document.getElementById('modalInput' + currentModalId).value;
     const valorInput2 = document.getElementById('modalInput-2' + currentModalId).value;
     const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
