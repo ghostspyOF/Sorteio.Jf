@@ -31,6 +31,7 @@
             max-width: 550px;
             text-align: center;
             border-top: 5px solid #0056b3;
+            position: relative;
         }
 
         .badge-seguro {
@@ -83,7 +84,7 @@
             font-size: 0.9rem;
         }
 
-        input[type="number"], input[type="password"] {
+        input[type="number"] {
             width: 100%;
             padding: 14px;
             border: 1.5px solid #cbd5e0;
@@ -94,7 +95,7 @@
             transition: all 0.2s ease;
         }
 
-        input[type="number"]:focus, input[type="password"]:focus {
+        input[type="number"]:focus {
             border-color: #0056b3;
             background-color: #fff;
             box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15);
@@ -124,8 +125,7 @@
             transform: translateY(1px);
         }
 
-        /* Desabilita os botões durante o sorteio para evitar cliques duplicados */
-        .btn-sortear:disabled, .btn-teste:disabled {
+        .btn-sortear:disabled {
             background-color: #a0aec0 !important;
             border-color: #cbd5e0 !important;
             cursor: not-allowed;
@@ -172,14 +172,12 @@
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Efeito de rotação e pulsação contínua para a bola em modo suspense */
         .numero-bola.girando {
             background: linear-gradient(45deg, #ff9f43, #ee5253);
             animation: girarBola 0.15s infinite linear;
             box-shadow: 0 0 15px rgba(238, 82, 83, 0.4);
         }
 
-        /* Estilo do bilhete do ganhador */
         .bilhete-ganhador {
             background: #fff;
             border: 2px dashed #0056b3;
@@ -218,59 +216,6 @@
             gap: 4px;
         }
 
-        .bloco-seguranca {
-            margin-top: 35px;
-            padding-top: 25px;
-            border-top: 1px solid #e2e8f0;
-            text-align: left;
-        }
-
-        .bloco-seguranca h2 {
-            font-size: 0.95rem;
-            color: #1a202c;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .bloco-seguranca p {
-            font-size: 0.85rem;
-            color: #718096;
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-
-        /* Alterado para garantir a centralização perfeita do botão */
-        .btn-teste-container {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-top: 5px;
-        }
-
-        .btn-teste {
-            display: inline-block;
-            background: #219bad;
-            border: 1px solid #cbd5e0;
-            color: #f0f2f2;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 1.4rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-        }
-
-        .btn-teste:hover {
-            background-color: #edf2f7;
-            color: #1a202c;
-            border-color: #a0aec0;
-        }
-
-        /* Efeito gangorra (uma ponta sobe, a outra desce) */
-        .animar-gangorra {
-            animation: gangorra 0.6s ease-in-out infinite;
-        }
-
         .info-rodape {
             margin-top: 25px;
             font-size: 0.85rem;
@@ -278,7 +223,6 @@
             font-weight: 500;
         }
 
-        /* Nova seção informativa do Instagram e WhatsApp */
         .bloco-transmissao {
             margin-top: 20px;
             padding: 15px;
@@ -294,33 +238,21 @@
             line-height: 1.5;
         }
 
-        .link-instagram {
-            color: #d53f8c;
-            text-decoration: none;
-            font-weight: 700;
-            transition: color 0.2s ease;
-        }
-
-        .link-instagram:hover {
-            color: #b83280;
-            text-decoration: underline;
-        }
-
-        /* Estilos do Botão Admin e Painel */
         .btn-admin {
-            margin-top: 20px;
-            background: none;
-            border: 1px solid #e2e8f0;
-            color: #a0aec0;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            position: relative;
+            padding: 25px 20px;
+            margin: 5px;                                                  
+            font-size: 15px;
+            font-weight: bold;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #dd6b20, #dd6b20, #dd6b20, #dd6b20);
+            background-size: 400%;
+            border: none;
+            border-radius: 50px;
             cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
+            transition: transform 0.2s ease;
         }
 
         .btn-admin:hover {
@@ -329,7 +261,6 @@
             border-color: #cbd5e0;
         }
 
-        /* Telas Modais (Admin e Autenticação) */
         .modal-admin {
             position: fixed;
             top: 0;
@@ -355,21 +286,8 @@
             animation: popIn 0.3s ease;
         }
 
-        /* Design específico para o Card de Senha e Avisos */
-        .modal-content.card-senha {
-            max-width: 380px;
-            text-align: center;
-            border-top: 4px solid #e53e3e;
-        }
-
-        .modal-content.card-senha h2 {
-            justify-content: center;
-            color: #e53e3e;
-        }
-
-        /* Design customizado para o Alerta de Lista Vazia */
         .modal-content.card-aviso {
-            max-width: 420px;
+            max-width: 460px;
             text-align: center;
             border-top: 4px solid #dd6b20;
         }
@@ -377,14 +295,6 @@
         .modal-content.card-aviso h2 {
             justify-content: center;
             color: #dd6b20;
-        }
-
-        .msg-erro-senha {
-            color: #e53e3e;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-top: 8px;
-            display: none;
         }
 
         .modal-content h2 {
@@ -419,17 +329,34 @@
             display: flex;
             justify-content: flex-end;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .btn-fechar {
             background-color: #edf2f7;
             color: #4a5568;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 16px;
             font-size: 0.9rem;
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
+        }
+
+        .btn-anonimo {
+            background-color: #718096;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-anonimo:hover {
+            background-color: #4a5568;
         }
 
         .btn-salvar {
@@ -443,26 +370,46 @@
             cursor: pointer;
         }
 
-        .btn-acessar {
-            background-color: #e53e3e;
+        .btn-prosseguir {
+            background-color: #dd6b20;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 16px;
             font-size: 0.9rem;
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
         }
 
-        .btn-prosseguir {
-            background-color: #dd6b20;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
+        .wrapper-linha-divisoria {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .particula-fogo {
+            position: absolute;
+            bottom: 0;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 1;
+            animation: explodirParticula 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes explodirParticula {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0.3);
+                opacity: 0;
+            }
         }
 
         @keyframes popIn {
@@ -476,16 +423,6 @@
             100% { transform: scale(1) rotate(360deg); }
         }
 
-        /* Animação que simula uma gangorra (sobe e desce as pontas alternadamente) */
-        @keyframes gangorra {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(4deg); }
-            50% { transform: rotate(0deg); }
-            75% { transform: rotate(-4deg); }
-            100% { transform: rotate(0deg); }
-        }
-
-        /* Ajuste responsivo para telas pequenas */
         @media (max-width: 480px) {
             .input-grid {
                 grid-template-columns: 1fr;
@@ -493,16 +430,150 @@
             .container {
                 padding: 25px 20px;
             }
+            .modal-botoes {
+                justify-content: center;
+                flex-direction: column;
+                width: 100%;
+            }
+            .modal-botoes button {
+                width: 100%;
+            }
+        }
+    
+        #bloqueio-seguranca {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal-autenticacao {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 340px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        .modal-autenticacao h2 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            color: #1e293b;
+            font-weight: 700;
+        }
+        .modal-autenticacao p {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        .campo-autenticacao {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+            background-color: #f8fafc;
+        }
+        .campo-autenticacao:focus {
+            border-color: #3b82f6;
+        }
+        .btn-acessar {
+            width: 100%;
+            background-color: #3b82f6;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-acessar:hover {
+            background-color: #2563eb;
+        }
+        .msg-erro {
+            color: #dc2626;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+            display: none;
         }
     </style>
 </head>
 <body>
+    <div id="bloqueio-seguranca">
+        <div class="modal-autenticacao" style="position: relative; padding-top: 40px;">
+            <a onclick="document.getElementById('bloqueio-seguranca').style.display='none'" 
+               style="position: absolute; 
+                      top: 15px; 
+                      right: 15px; 
+                      color: #dc2626; 
+                      text-decoration: none; 
+                      font-family: Arial, sans-serif; 
+                      font-size: 40px; 
+                      font-weight: bold; 
+                      line-height: 1; 
+                      cursor: pointer;
+                      transition: transform 0.2s;"
+               onmouseover="this.style.transform='scale(1.2)'" 
+               onmouseout="this.style.transform='scale(1)'"
+               title="Fechar Bloqueio para testes">
+                &times;
+            </a>
+
+            <h2 style="font-size: 40px;">Área Restrita</h2>
+            <p>Insira suas credenciais para gerenciar o site</p>
+            
+            <input type="text" id="authID" class="campo-autenticacao" placeholder="Digite o ID de usuário">
+            <input type="password" id="authSenha" class="campo-autenticacao" placeholder="Digite a senha">
+            
+            <button type="button" class="btn-acessar" onclick="validarAcessoPainel()">ENTRAR</button><br>
+            
+            <a href="https://api.whatsapp.com/send?phone=5562995679219&text=Eu%20gostaria%20de%20saber%20a%20senha%20para%20editar%20o%20site" 
+               target="_blank" 
+               style="display: inline-block; 
+                      margin-top: 20px; 
+                      padding: 12px 24px; 
+                      background: linear-gradient(135deg, #25D366, #128C7E); 
+                      color: white; 
+                      text-decoration: none; 
+                      font-family: 'Segoe UI', sans-serif; 
+                      font-size: 14px; 
+                      font-weight: bold; 
+                      border-radius: 50px; 
+                      text-transform: uppercase; 
+                      letter-spacing: 0.5px; 
+                      box-shadow: 0 0 15px #25D366, 0 0 30px rgba(37, 211, 102, 0.4); 
+                      transition: all 0.3s ease; 
+                      animation: brilhoPulsante 1.5s infinite alternate;">
+                Esqueci a senha
+            </a>
+            
+            <div id="erroAuth" class="msg-erro">ID ou Senha incorretos!</div>
+        </div>
+    </div>
 
     <div class="container">
-        <div class="badge-seguro">Ambiente 100% Seguro </div>
+        <div class="badge-seguro">Ambiente 100% Seguro</div>
 
         <h1>Sorteio</h1>
-        <p class="subtitulo">O sorteio será realizado após o preenchimento total de todos os números e de forma organizada para sair tudo certo.</p>
+        <p class="subtitulo">Chegou o grande dia de saber quem é o vencedor</p>
+        <div class="wrapper-linha-divisoria" id="linhaDivisoria">
+            <hr>
+        </div>
         
         <div class="input-grid">
             <div class="input-group">
@@ -523,108 +594,37 @@
             <div class="numeros-sorteados" id="espacoNumeros"></div>
         </div>
 
-        <div class="bloco-seguranca">
-            <h2 style="text-align: center;">Transparência Garantida</h2>
-            <p>Este sistema utiliza algoritmos matemáticos criptográficos imutáveis. Para comprovar a integridade dos resultados, os participantes podem realizar testes de simulação no próprio site a qualquer momento antes do sorteio oficial.</p>
-            <div class="btn-teste-container">
-                <button class="btn-teste" id="btnTeste" onclick="executarSorteio(true)">⚙️ Realizar Teste do Sorteio</button>
-            </div>
-        </div>
-
         <p class="info-rodape">O sorteio oficial será realizado por aqui mesmo.</p>
 
+        <button class="btn-admin" onclick="abrirAdmin()">CADASTRAR LISTA</button>
         <div class="bloco-transmissao">
-            <p>
-                🎥 O sorteio será gravado e postado nos status do WhatsApp:<br>
-                <a href="https://wa.me/5562991740699" target="_blank" class="link-instagram">Visualizar WhatsApp</a>.<br>
-                
-                <a href="https://www.instagram.com/jefferson_mascarenhass?igsh=y3dpYmlibHE2NDZz" target="_blank" style="
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-    color: #ffffff;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    text-decoration: none;
-    margin: 20px;
-    padding: 12px 28px;
-    border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(220, 39, 67, 0.4);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
-" onmouseover="this.style.transform='scale(1.05)'; this.style.box-shadow='0 6px 20px rgba(220, 39, 67, 0.6)';" onmouseout="this.style.transform='scale(1)'; this.style.box-shadow='0 4px 15px rgba(220, 39, 67, 0.4)';" class="link-instagram">
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: middle;">
-        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-    </svg>
-    Visualizar perfil no Instagram
-</a>
-
-                
-            </p>
-            <p style="margin-top: 8px; font-size: 0.85rem; color: #6b46c1;">
-                📱 Fiquem tranquilos! 📱<br>
-                Se você for o GANHADOR nós iremos contatar pelo seu WhatsApp no exato momento.
-            </p>
-            <hr style="color: red; margin: 20px;">
-            <a href="https://wa.me/5562995679219"><button style="
-    position: relative;
-    padding: 16px 40px;
-    margin: 20px;                                                  
-    font-size: 18px;
-    font-weight: bold;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    background: linear-gradient(90deg, #25d366, #128c7e, #075e54, #25d366);
-    background-size: 400%;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-" 
-onmouseover="this.style.transform='scale(1.05)'" 
-onmouseout="this.style.transform='scale(1)'" 
-onmousedown="this.style.transform='scale(0.98)'" 
-onmouseup="this.style.transform='scale(1.05)'">
-    Quero Criar Meu Site
-</button></a>
-        </div>
-
-        <button class="btn-admin" onclick="solicitarSenhaAdmin()">🛡️ Painel Admin</button>
-
-    <div class="modal-admin" id="modalAvisoLista">
-        <div class="modal-content card-aviso">
-            <h2>⚠️ Lista de Participantes Vazia</h2>
-            <p style="font-size: 0.95rem; color: #4a5568; margin-bottom: 20px; line-height: 1.5;">Por favor, cadastre a lista de participantes no Painel Admin antes di iniciar o Sorteio Oficial.</p>
-            <div class="modal-botoes" style="justify-content: center; gap: 15px;">
-                <button class="btn-fechar" onclick="cancelarAvisoLista()">Cancelar</button>
-                <button class="btn-prosseguir" onclick="prosseguirParaAdmin()">Cadastrar Lista</button>
-            </div>
+            <p style="color: #0056b3; font-weight: bold;">
+                Cadastre uma lista para o sorteio ficar com uma aparência melhor e mais profissional!
+            </p><br>
+            <p>A sua lista basta ser assim:</p>
         </div>
     </div>
 
-    <div class="modal-admin" id="modalSenhaAdmin">
-        <div class="modal-content card-senha">
-            <h2>🔒 Área Restrita</h2>
-            <p style="font-size: 0.9rem; color: #4a5568; margin-bottom: 15px;">Informe a credencial de segurança para acessar o painel.</p>
-            <input type="password" id="campoSenhaAdmin" placeholder="Digite a senha..." onkeydown="if(event.key === 'Enter') validarSenhaAdmin()">
-            <div class="msg-erro-senha" id="erroSenhaAdmin">⚠️ Senha incorreta! Tente novamente.</div>
-            <div class="modal-botoes" style="margin-top: 20px;">
-                <button class="btn-fechar" onclick="fecharModalSenha()">Cancelar</button>
-                <button class="btn-acessar" onclick="validarSenhaAdmin()">Acessar</button>
+    <div class="modal-admin" id="modalAvisoLista">
+        <div class="modal-content card-aviso">
+            <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+                <div style="background-color: red; color: white; font-weight: bold; font-size: 32px; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3);">!</div>
+            </div>
+            <h2>Lista de Participantes Vazia</h2>
+            <p style="font-size: 0.95rem; color: #4a5568; margin-bottom: 20px; line-height: 1.5;">Você ainda não cadastrou os participantes. Deseja cadastrar agora ou realizar o sorteio de forma anônima?</p>
+            <div class="modal-botoes" style="justify-content: center; gap: 10px;">
+                <button class="btn-anonimo" onclick="confirmarSorteioAnonimo()">SORTEIO ANÔNIMO</button>
+                <button class="btn-prosseguir" onclick="prosseguirParaAdmin()">Cadastrar Lista</button>
+                <button class="btn-fechar" onclick="fecharAvisoLista()">VOLTAR</button>
             </div>
         </div>
     </div>
 
     <div class="modal-admin" id="modalAdmin">
         <div class="modal-content">
-            <h2>🛡️ Cadastro de Participantes</h2>
-            <p style="font-size: 0.85rem; color: #718096; margin-bottom: 10px;">Cole a lista no formato: <strong>Número - Nome: WhatsApp</strong> (um por linha)</p>
-            <textarea id="listaParticipantes" placeholder="Exemplo:&#10;1 - Maria: 62 995679219&#10;2 - Mayckon: 62 995679218"></textarea>
+            <h2>Cadastro de Participantes</h2>
+            <p style="font-size: 0.85rem; color: #718096; margin-bottom: 10px;">Cole a lista no formato do exemplo abaixo: </p>
+            <textarea id="listaParticipantes" placeholder="1 - Maria: 62 995679219&#10;2 - Mayckon: 62 995679218"></textarea>
             <div class="modal-botoes">
                 <button class="btn-fechar" onclick="fecharAdmin()">Fechar</button>
                 <button class="btn-salvar" onclick="salvarParticipantes()">Salvar Lista</button>
@@ -633,45 +633,69 @@ onmouseup="this.style.transform='scale(1.05)'">
     </div>
 
     <script>
+        function validarAcessoPainel() {
+            const usuarioInput = document.getElementById('authID').value.trim();
+            const senhaInput = document.getElementById('authSenha').value.trim();
+            const divErro = document.getElementById('erroAuth');
+
+            const urlBackend = "https://script.google.com/macros/s/AKfycbxnFPcHlGE0qldY0LBW1YEwRyyNt9Oeh_NqAXEnjM2srfwgvElum5JmfSYmPqP6NzhJZA/exec";
+
+            if (!usuarioInput || !senhaInput) {
+                if (divErro) divErro.style.display = 'block';
+                return;
+            }
+
+            const nomeCallback = 'meuCallbackOuvinte_' + Math.round(Math.random() * 1000000);
+            
+            window[nomeCallback] = function(resultado) {
+                const telaBloqueio = document.getElementById('bloqueio-seguranca');
+                
+                if (resultado && resultado.autorizado === true) {
+                    if (telaBloqueio) telaBloqueio.style.display = 'none';
+                    if (divErro) divErro.style.display = 'none';
+                } else {
+                    if (divErro) divErro.style.display = 'block';
+                    document.getElementById('authSenha').value = '';
+                }
+                
+                document.body.removeChild(scriptElemento);
+                delete window[nomeCallback];
+            };
+
+            const parametros = `?usuario=${encodeURIComponent(usuarioInput)}&senha=${encodeURIComponent(senhaInput)}&callback=${nomeCallback}`;
+            const scriptElemento = document.createElement('script');
+            scriptElemento.src = urlBackend + parametros;
+            
+            scriptElemento.onerror = function() {
+                alert("Erro de autenticação: Verifique sua conexão ou a configuração do script.");
+                if (divErro) divErro.style.display = 'block';
+                document.body.removeChild(scriptElemento);
+                delete window[nomeCallback];
+            };
+
+            document.body.appendChild(scriptElemento);
+        }
+
+        document.getElementById('authSenha').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                validarAcessoPainel();
+            }
+        });
+        
         let bancoParticipantes = {};
 
-        // Inicia o processo de verificação com o belo modal customizado
-        function solicitarSenhaAdmin() {
-            document.getElementById('campoSenhaAdmin').value = '';
-            document.getElementById('erroSenhaAdmin').style.display = 'none';
-            document.getElementById('modalSenhaAdmin').style.display = 'flex';
-            setTimeout(() => document.getElementById('campoSenhaAdmin').focus(), 50);
-        }
-
-        function fecharModalSenha() {
-            document.getElementById('modalSenhaAdmin').style.display = 'none';
-        }
-
-        function validarSenhaAdmin() {
-            const senhaDigitada = document.getElementById('campoSenhaAdmin').value;
-            
-            if (senhaDigitada === 'Rif@D') {
-                fecharModalSenha();
-                abrirAdmin();
-            } else {
-                document.getElementById('erroSenhaAdmin').style.display = 'block';
-                document.getElementById('campoSenhaAdmin').focus();
-            }
-        }
-
-        // Funções para controlar o novo modal de aviso
         function fecharAvisoLista() {
             document.getElementById('modalAvisoLista').style.display = 'none';
         }
 
         function prosseguirParaAdmin() {
             fecharAvisoLista();
-            solicitarSenhaAdmin();
+            abrirAdmin();
         }
 
-        function cancelarAvisoLista() {
+        function confirmarSorteioAnonimo() {
             fecharAvisoLista();
-            executarSorteio(true);
+            executarSorteio(true); 
         }
 
         function abrirAdmin() {
@@ -684,21 +708,25 @@ onmouseup="this.style.transform='scale(1.05)'">
 
         function salvarParticipantes() {
             const texto = document.getElementById('listaParticipantes').value;
-            const linhas = texto.split('\n');
+            const linhas = texto.split(/\r?\n/);
             bancoParticipantes = {}; 
 
             linhas.forEach(linha => {
                 if (!linha.trim()) return;
 
-                const regex =(/^\s*(\d+)\s*[-\s]*([^:]+):(.*)$/);
-                const match = linha.match(regex);
+                // CORRIGIDO: Removido o erro de sintaxe do "mergeLines"
+                const partes = linha.split(':');
+                if (partes.length >= 2) {
+                    const esquerda = partes[0]; 
+                    const zap = partes.slice(1).join(':').trim(); 
 
-                if (match) {
-                    const numero = parseInt(match[1]);
-                    const nome = match[2].trim();
-                    const zap = match[3].trim();
+                    const numeroMatch = esquerda.match(/^\s*(\d+)/);
+                    if (numeroMatch) {
+                        const numero = parseInt(numeroMatch[1], 10);
+                        const nome = esquerda.replace(/^\s*\d+\s*[-\s]*/, '').trim();
 
-                    bancoParticipantes[numero] = { nome: nome, zap: zap };
+                        bancoParticipantes[numero] = { nome: nome, zap: zap };
+                    }
                 }
             });
 
@@ -706,14 +734,40 @@ onmouseup="this.style.transform='scale(1.05)'">
             fecharAdmin();
         }
 
-        function executarSorteio(isTeste) {
+        function lancarFogos() {
+            const pai = document.getElementById('linhaDivisoria');
+            const cores = ['#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#eccc68', '#ff6b81', '#78e08f'];
+            const totalParticulas = 60;
+
+            for (let i = 0; i < totalParticulas; i++) {
+                const particula = document.createElement('span');
+                particula.classList.add('particula-fogo');
+
+                const posicaoXInicial = Math.random() * pai.offsetWidth;
+                particula.style.left = `${posiacaoXInicial = Math.random() * pai.offsetWidth}px`;
+
+                const destinoX = (Math.random() - 0.5) * 250; 
+                const destinoY = -(Math.random() * 180 + 100); 
+
+                particula.style.setProperty('--x', `${destinoX}px`);
+                particula.style.setProperty('--y', `${destinoY}px`);
+                particula.style.animationDelay = `${Math.random() * 0.4}s`;
+
+                particula.style.backgroundColor = cores[Math.floor(Math.random() * cores.length)];
+                particula.style.boxShadow = `0 0 8px ${particula.style.backgroundColor}`;
+
+                pai.appendChild(particula);
+
+                setTimeout(() => {
+                    particula.remove();
+                }, 1600);
+            }
+        }
+
+        function executarSorteio(forçarSemLista = false) {
             const totalInput = document.getElementById('totalNumeros');
             const qtdInput = document.getElementById('qtdSortear');
             const btnOficial = document.getElementById('btnOficial');
-            const btnTeste = document.getElementById('btnTeste');
-
-            // Limpa a animação de balanço se o usuário iniciar qualquer sorteio
-            btnTeste.classList.remove('animar-gangorra');
 
             const total = parseInt(totalInput.value);
             const quantidade = parseInt(qtdInput.value);
@@ -721,12 +775,6 @@ onmouseup="this.style.transform='scale(1.05)'">
             const containerResultado = document.getElementById('resultadoContainer');
             const espacoNumeros = document.getElementById('espacoNumeros');
             const tituloResultado = document.getElementById('resultadoGeralTitulo');
-
-            if (isTeste && (isNaN(total) || isNaN(quantidade))) {
-                totalInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                totalInput.focus();
-                return;
-            }
 
             if (isNaN(total) || isNaN(quantidade)) {
                 alert('Por favor, defina a quantidade total e quantos números deseja sortear para continuar.');
@@ -743,29 +791,23 @@ onmouseup="this.style.transform='scale(1.05)'">
                 return;
             }
 
-            // NOVA REGRA ALTERADA: Se foi sorteio oficial e não houver participantes, abre o modal customizado bonito
-            if (!isTeste && Object.keys(bancoParticipantes).length === 0) {
+            if (Object.keys(bancoParticipantes).length === 0 && !forçarSemLista) {
                 document.getElementById('modalAvisoLista').style.display = 'flex';
                 return;
             }
 
+            lancarFogos();
+
             btnOficial.disabled = true;
-            btnTeste.disabled = true;
             totalInput.disabled = true;
             qtdInput.disabled = true;
 
             espacoNumeros.innerHTML = '';
             containerResultado.style.display = 'block';
 
-            if (isTeste) {
-                tituloResultado.innerHTML = '🔬 <span style="color: #4a5568;">Sorteio de Teste em Andamento...</span> 🔬';
-                containerResultado.style.backgroundColor = '#edf2f7';
-                containerResultado.style.borderColor = '#cbd5e0';
-            } else {
-                tituloResultado.innerHTML = '⏳ <span style="color: #0056b3;">Sorteio Oficial em Andamento...</span> ⏳';
-                containerResultado.style.backgroundColor = '#f0fdf4';
-                containerResultado.style.borderColor = '#bbf7d0';
-            }
+            tituloResultado.innerHTML = '⏳ <span style="color: #0056b3;">Sorteio Oficial em Andamento...</span> ⏳';
+            containerResultado.style.backgroundColor = '#f0fdf4';
+            containerResultado.style.borderColor = '#bbf7d0';
 
             containerResultado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
@@ -778,18 +820,13 @@ onmouseup="this.style.transform='scale(1.05)'">
             }
 
             let indexAtual = 0;
-            const tempoDeSuspense = 10000; 
+            // OTIMIZADO: Ajustado suspense de 10s para 2.5s para dinamismo
+            const tempoDeSuspense = 2500; 
 
             function sortearProximaBola() {
                 if (indexAtual >= quantidade) {
-                    if (isTeste) {
-                        tituloResultado.innerHTML = '🔬 <span style="color: #4a5568;">Resultado de Teste Concluído</span> 🔬';
-                    } else {
-                        tituloResultado.innerHTML = '🎉 <span style="color: #0056b3;">Resultado Oficial Concluído!</span> 🎉';
-                    }
-                    
+                    tituloResultado.innerHTML = '🎉 <span style="color: #0056b3;">Resultado Oficial Concluído!</span> 🎉';
                     btnOficial.disabled = false;
-                    btnTeste.disabled = false;
                     totalInput.disabled = false;
                     qtdInput.disabled = false;
                     return;
@@ -819,57 +856,66 @@ onmouseup="this.style.transform='scale(1.05)'">
                     bola.innerText = numeroDefinitivo;
                     bola.classList.remove('girando'); 
 
-                    if (isTeste) {
-                        bola.style.background = '#4a5568';
-                    }
-
                     const numeroDoPremio = indexAtual + 1;
 
-                    // NOVA REGRA: Se NÃO for teste, renderiza os bilhetes normalmente
-                    if (!isTeste) {
-                        if (bancoParticipantes[numeroDefinitivo]) {
-                            const dados = bancoParticipantes[numeroDefinitivo];
-                            const textoMensagem = encodeURIComponent(`Olá ${dados.nome}! Você foi sorteado no Prêmio ${numeroDoPremio} com o número ${numeroDefinitivo}. Parabéns! 🎉`);
-                            const numeroLimpoWhatsApp = dados.zap.replace(/\s+/g, '');
-                            
-                            const bilhete = document.createElement('div');
-                            bilhete.classList.add('bilhete-ganhador');
-                            bilhete.innerHTML = `
-                                <div class="bilhete-topo">Prêmio ${numeroDoPremio} (Nº ${numeroDefinitivo})</div>
-                                <div class="bilhete-nome">👤 ${dados.nome}</div>
-                                <div class="bilhete-zap">📱 WhatsApp: ${dados.zap}</div>
-                                <a href="https://api.whatsapp.com/send?phone=55${numeroLimpoWhatsApp}&text=${textoMensagem}" target="_blank" style="
-                                    display: inline-flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    background-color: #25d366;
-                                    color: white;
-                                    text-decoration: none;
-                                    font-weight: bold;
-                                    font-size: 0.85rem;
-                                    padding: 8px 12px;
-                                    border-radius: 6px;
-                                    margin-top: 10px;
-                                    box-shadow: 0 2px 5px rgba(37, 211, 102, 0.3);
-                                ">💬 Enviar Mensagem</a>
-                            `;
-                            blocoBola.appendChild(bilhete);
-                            bilhete.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        } else {
-                            const bilheteSemComprador = document.createElement('div');
-                            bilheteSemComprador.classList.add('bilhete-ganhador');
-                            bilheteSemComprador.style.borderColor = '#a0aec0';
-                            bilheteSemComprador.style.backgroundColor = '#f1f5f9';
-                            bilheteSemComprador.innerHTML = `
-                                <div class="bilhete-topo" style="color: #718096; border-color: #cbd5e0;">Prêmio ${numeroDoPremio} (Nº ${numeroDefinitivo})</div>
-                                <div class="bilhete-nome" style="color: #4a5568;">Número não comprado 😢</div>
-                                <div style="font-size: 0.85rem; color: #718096; margin-top: 5px;">Este número não possui cadastro associado.</div>
-                            `;
-                            blocoBola.appendChild(bilheteSemComprador);
-                            bilheteSemComprador.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        }
+                    const participanteGanhador = bancoParticipantes[numeroDefinitivo] || bancoParticipantes[String(numeroDefinitivo)];
+
+                    if (participanteGanhador) {
+                        const dados = participanteGanhador;
+                        const textoMensagem = encodeURIComponent(`Olá ${dados.nome}! Você foi sorteado no Prêmio ${numeroDoPremio} com o número ${numeroDefinitivo}. Parabéns! 🎉`);
+                        const numeroLimpoWhatsApp = dados.zap.replace(/\s+/g, '');
+                        
+                        const bilhete = document.createElement('div');
+                        bilhete.classList.add('bilhete-ganhador');
+                        bilhete.innerHTML = `
+                            <div class="bilhete-topo">Prêmio ${numeroDoPremio} (Nº ${numeroDefinitivo})</div>
+                            <div class="bilhete-nome">👤 ${dados.nome}</div>
+                            <div class="bilhete-zap">📱 WhatsApp: ${dados.zap}</div>
+                            <a href="https://api.whatsapp.com/send?phone=55${numeroLimpoWhatsApp}&text=${textoMensagem}" target="_blank" style="
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                background-color: #25d366;
+                                color: white;
+                                text-decoration: none;
+                                font-weight: bold;
+                                font-size: 0.85rem;
+                                padding: 8px 12px;
+                                border-radius: 6px;
+                                margin-top: 10px;
+                                box-shadow: 0 2px 5px rgba(37, 211, 102, 0.3);
+                            ">💬 Enviar Mensagem</a>
+                        `;
+                        blocoBola.appendChild(bilhete);
+                    } else {
+                        const bilheteAnonimo = document.createElement('div');
+                        bilheteAnonimo.classList.add('bilhete-ganhador');
+                        bilheteAnonimo.innerHTML = `
+                            <div class="bilhete-topo">Prêmio ${numeroDoPremio} (Nº ${numeroDefinitivo})</div>
+                            <div class="bilhete-nome">👤 Ganhador-Anônimo</div>
+                            <div class="bilhete-zap" style="color: #718096;">📱 WhatsApp: Não Cadastrado</div>
+                            <button disabled style="
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                background-color: #a0aec0;
+                                color: white;
+                                font-weight: bold;
+                                font-size: 0.85rem;
+                                padding: 8px 12px;
+                                border-radius: 6px;
+                                margin-top: 10px;
+                                border: none;
+                                cursor: not-allowed;
+                                width: auto;
+                            ">ZAP OFF</button>
+                        `;
+                        blocoBola.appendChild(bilheteAnonimo);
                     }
 
+                    lancarFogos();
+
+                    blocoBola.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     indexAtual++;
                     sortearProximaBola(); 
                 }, tempoDeSuspense);
@@ -878,6 +924,5 @@ onmouseup="this.style.transform='scale(1.05)'">
             sortearProximaBola();
         }
     </script>
-
 </body>
 </html>
