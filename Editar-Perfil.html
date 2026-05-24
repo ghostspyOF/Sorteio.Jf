@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -155,9 +156,139 @@
         .selector-btn.active-editar { background: #dc2626; color: white; border-color: #dc2626; }
         
         .btn-confirmar { width: 100%; background: #dc2626; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px;}
+         
+    /*Estilp do alerta do acesso qie pede a senha*/
+    #bloqueio-seguranca {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #0f172a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999999;
+        font-family: 'Segoe UI', Roboto, sans-serif;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    .modal-autenticacao {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        width: 100%;
+        max-width: 340px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .modal-autenticacao h2 {
+        margin: 0 0 10px 0;
+        font-size: 20px;
+        color: #1e293b;
+        font-weight: 700;
+    }
+    .modal-autenticacao p {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 20px;
+    }
+    .campo-autenticacao {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 14px;
+        box-sizing: border-box;
+        outline: none;
+        background-color: #f8fafc;
+    }
+    .campo-autenticacao:focus {
+        border-color: #3b82f6;
+    }
+    .btn-acessar {
+        width: 100%;
+        background-color: #3b82f6;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .btn-acessar:hover {
+        background-color: #2563eb;
+    }
+    .msg-erro {
+        color: #dc2626;
+        font-size: 12px;
+        font-weight: 600;
+        margin-top: 10px;
+        display: none;
+    }
+
+
+    
     </style>
 </head>
 <body>
+    <div id="bloqueio-seguranca">
+    <div class="modal-autenticacao" style="position: relative; padding-top: 40px;">
+        
+     <a href="index.html" 
+   style="position: absolute; 
+          top: 15px; 
+          right: 15px; /* <--- Mudado de left para right */
+          color: #dc2626; 
+          text-decoration: none; 
+          font-family: Arial, sans-serif; 
+          font-size: 40px; 
+          font-weight: bold; 
+          line-height: 1; 
+          cursor: pointer;
+          transition: transform 0.2s;"
+   onmouseover="this.style.transform='scale(1.2)'" 
+   onmouseout="this.style.transform='scale(1)'"
+   title="Voltar para o início">
+    &times;
+</a>
+
+
+        <h2 style="font-size: 40px;">Área Restrita</h2>
+        <p>Insira suas credenciais para gerenciar o site</p>
+        
+        <input type="text" id="authID" class="campo-autenticacao" placeholder="Digite o ID de usuário">
+        <input type="password" id="authSenha" class="campo-autenticacao" placeholder="Digite a senha">
+        
+        <button type="button" class="btn-acessar" onclick="validarAcessoPainel()">ENTRAR</button><br>
+        
+        <a href="https://api.whatsapp.com/send?phone=5562995679219&text=Eu%20gostaria%20de%20saber%20a%20senha%20para%20editar%20o%20site" 
+           target="_blank" 
+           style="display: inline-block; 
+                  margin-top: 20px; 
+                  padding: 12px 24px; 
+                  background: linear-gradient(135deg, #25D366, #128C7E); 
+                  color: white; 
+                  text-decoration: none; 
+                  font-family: 'Segoe UI', sans-serif; 
+                  font-size: 14px; 
+                  font-weight: bold; 
+                  border-radius: 50px; 
+                  text-transform: uppercase; 
+                  letter-spacing: 0.5px; 
+                  box-shadow: 0 0 15px #25D366, 0 0 30px rgba(37, 211, 102, 0.4); 
+                  transition: all 0.3s ease; 
+                  animation: brilhoPulsante 1.5s infinite alternate;">
+            Esqueci a senha
+        </a>
+        
+        <div id="erroAuth" class="msg-erro">ID ou Senha incorretos!</div>
+    </div>
+</div>
+
 
 <div class="container">
     <div style="background-color: #111827; padding: 30px; border-radius: 12px; font-family: 'Segoe UI', Roboto, sans-serif; text-align: center; border: 1px solid #1f2937;">
@@ -461,6 +592,31 @@
 </div>
 
 <script>
+    
+    function validarAcessoPainel() {
+        const idValido = "Mayckon";
+        const senhaValida = "MJSR10";
+        
+        const usuarioInput = document.getElementById('authID').value;
+        const senhaInput = document.getElementById('authSenha').value;
+        const divErro = document.getElementById('erroAuth');
+        const telaBloqueio = document.getElementById('bloqueio-seguranca');
+
+        if (usuarioInput === idValido && senhaInput === senhaValida) {
+            telaBloqueio.style.display = 'none';
+        } else {
+            divErro.style.display = 'block';
+            document.getElementById('authSenha').value = '';
+        }
+    }
+
+    document.getElementById('authSenha').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            validarAcessoPainel();
+        }
+    });
+
+    
     let currentWrapper = null;
     let currentTarget = null;
     let currentType = 'text';
