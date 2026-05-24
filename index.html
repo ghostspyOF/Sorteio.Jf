@@ -1033,9 +1033,6 @@ window.chavePixPlanilha = "0000000000"; // Chave PIX padrão de segurança caso 
             const textoBruto = await resposta.text();
             const linhas = textoBruto.split(/\r?\n/);
 
-                        linhas.forEach(linha => {
-                if (!linha.trim()) return;
-
                 // --- CORREÇÃO AQUI ---
                 // Descobre se o separador principal é ; ou ,
                                        linhas.forEach(linha => {
