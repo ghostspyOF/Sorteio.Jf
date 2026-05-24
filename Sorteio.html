@@ -555,7 +555,7 @@
         </div>
 
         <!--🔒🔒🔒🔒⬇⬇bOTAO COM O MODAL COM SENHA E ID ⬇⬇⬇⬇🔒🔒🔒🔒🔒-->
-        <button class="btn-sortear" id="btnOficial" onclick="solicitarSenhaAdmin('sorteio')">Começar Sorteio Oficial</button>
+        <button class="btn-sortear" id="btnOficial" onclick="execcutarSorteio('false')">SORTEAR NÚMERO</button>
         <!-- 🔒🔒🔒🔒⬆⬆⬆⬆⬆⬆⬆🔒🔒🔒🔒🔒 -->
         <div class="resultado-container" id="resultadoContainer">
             <div class="resultado-title" id="resultadoGeralTitulo">🎉 Número(s) Sorteado(s) 🎉</div>
@@ -735,6 +735,7 @@ onmouseup="this.style.transform='scale(1.05)'">
         }
 
         // 🔒🔒⬇⬇⬇⬇⬇ Sistema de Validação Segura via JSONP - ID e SENHA ⬇⬇⬇⬇⬇🔒🔒
+        // Para cada botão colocar: onclick="solicitarSenhaAdmin('sorteio')"
         function validarAcessoPainel() {
             const usuarioInput = document.getElementById('authID').value.trim();
             const senhaInput = document.getElementById('authSenha').value.trim();
@@ -805,7 +806,7 @@ onmouseup="this.style.transform='scale(1.05)'">
 
         function prosseguirParaAdmin() {
             fecharAvisoLista();
-            abrirAdmin();
+            solicitsrSenhaAdmin('painel');
         }
 
         function cancelarAvisoLista() {
