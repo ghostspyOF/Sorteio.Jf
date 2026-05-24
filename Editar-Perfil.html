@@ -595,8 +595,7 @@
 </div>
 
 <script>
-    //🔒🔒🔒TRVA PARA QUALQUER SITE🔒🔒🔒
-    // 🔒 Trava de Segurança com Backend
+    // 🔒 Trava de Segurança com Backend Corrigida
 async function validarAcessoPainel() {
     const usuarioInput = document.getElementById('authID').value.trim();
     const senhaInput = document.getElementById('authSenha').value.trim();
@@ -605,7 +604,6 @@ async function validarAcessoPainel() {
 
     const urlBackend = "https://script.google.com/macros/s/AKfycbxnFPcHlGE0qldY0LBW1YEwRyyNt9Oeh_NqAXEnjM2srfwgvElum5JmfSYmPqP6NzhJZA/exec";
 
-    // Se o usuário esqueceu de digitar algo, já avisa e para aqui
     if (!usuarioInput || !senhaInput) {
         if (divErro) divErro.style.display = 'block';
         return;
@@ -617,33 +615,26 @@ async function validarAcessoPainel() {
         dadosFormulario.append('usuario', usuarioInput);
         dadosFormulario.append('senha', senhaInput);
 
-        // Envia para o seu Backend usando o modo 'no-cors' para evitar o bloqueio do navegador
-const resposta = await fetch(urlBackend, {
-    method: 'POST',
-    mode: 'no-cors', // Evita o erro "Failed to fetch" bloqueado pelo CORS
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: dadosFormulario
-});
-        // Lê a resposta final do servidor
-        //const resultado = await resposta.json();
-        // Por estas para ver a resposta real:
-        const textoResposta = await resposta.text();
-        alert("Resposta do Servidor: " + textoResposta);
+        // Faz a requisição direta permitindo a leitura do resultado
+        const resposta = await fetch(urlBackend, {
+            method: 'POST',
+            body: dadosFormulario
+        });
 
-        // Verifica se o backend deu sinal verde
+        // Converte a resposta do servidor para objeto
+        const resultado = await resposta.json();
+
+        // Verifica se o backend deu o sinal verde
         if (resultado.autorizado === true) {
             if (telaBloqueio) telaBloqueio.style.display = 'none';
             if (divErro) divErro.style.display = 'none';
         } else {
-            // Se o ID ou Senha estiverem errados
+            // Se o ID ou Senha estiverem errados na planilha
             if (divErro) divErro.style.display = 'block';
             document.getElementById('authSenha').value = '';
         }
 
     } catch (erro) {
-        // Se houver qualquer falha de digitação ou rede, este alerta vai te avisar
         console.error("Erro interno:", erro);
         alert("Erro ao conectar com o servidor: " + erro.message);
     }
@@ -654,112 +645,108 @@ document.getElementById('authSenha').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         validarAcessoPainel();
     }
-});;
+});
 
-//🔒🔒🔒🔒🔒🔒
+// 📊 Variáveis globais do sistema de edição
+let currentWrapper = null;
+let currentTarget = null;
+let currentType = 'text';
+let modoSelecionado = '';
+let currentModalId = '';
 
+function openEditModal(btnElement, type, suffix) {
+    currentWrapper = btnElement.closest('.editable-wrapper');
+    currentTarget = currentWrapper.querySelector('.edit-target');
+    currentType = type;
+    modoSelecionado = 'editar';
+    currentModalId = suffix;
 
+    const selBtn = document.getElementById('selEditar' + suffix);
+    if(selBtn) selBtn.className = 'selector-btn active-editar';
+
+    const input = document.getElementById('modalInput' + suffix);
+    if(input && currentTarget) {
+        input.value = (type === 'image') ? currentTarget.src : currentTarget.innerText;
+    }
     
-    let currentWrapper = null;
-    let currentTarget = null;
-    let currentType = 'text';
-    let modoSelecionado = '';
-    let currentModalId = '';
+    const modal = document.getElementById('editModal' + suffix);
+    if(modal) modal.style.display = 'flex';
+}
 
-    function openEditModal(btnElement, type, suffix) {
-        currentWrapper = btnElement.closest('.editable-wrapper');
-        currentTarget = currentWrapper.querySelector('.edit-target');
-        currentType = type;
-        modoSelecionado = 'editar';
-        currentModalId = suffix;
+function setMode(mode, suffix) {
+    modoSelecionado = mode;
+    const selBtn = document.getElementById('selEditar' + suffix);
+    if(mode === 'editar' && selBtn) {
+        selBtn.className = 'selector-btn active-editar';
+    }
+}
 
-        // Ativa o seletor invisível de modo estrutural
-        const selBtn = document.getElementById('selEditar' + suffix);
-        if(selBtn) selBtn.className = 'selector-btn active-editar';
+function executarAcaoQuantidade() {
+    const valor = document.getElementById('inputQuantidade').value;
+    const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
+    
+    let formData = new FormData();
+    formData.append("entry.624057932", valor);
+    formData.append("entry.818510544", "19");
+    formData.append("entry.1941861272", "CONFIG_QUANTIDADE_NUMEROS");
 
-        const input = document.getElementById('modalInput' + suffix);
-        if(input && currentTarget) {
-            input.value = (type === 'image') ? currentTarget.src : currentTarget.innerText;
-        }
-        
-        const modal = document.getElementById('editModal' + suffix);
-        if(modal) modal.style.display = 'flex';
+    fetch(formUrl, { method: "POST", mode: "no-cors", body: formData });
+    alert("Enviado com sucesso!");
+}
+
+function executarAcaoQuantidade2() {
+    const valor = document.getElementById('inputQuantidade2').value;
+    const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
+    
+    let formData = new FormData();
+    formData.append("entry.624057932", valor);
+    formData.append("entry.818510544", "20"); 
+    formData.append("entry.1941861272", "CONFIG_VALOR_NUMERO");
+
+    fetch(formUrl, { method: "POST", mode: "no-cors", body: formData });
+    alert("Enviado com sucesso!");
+}
+
+function executarAcaoQuantidade3() {
+    const valor = document.getElementById('inputQuantidade3').value;
+    const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
+    
+    let formData = new FormData();
+    formData.append("entry.624057932", valor);
+    formData.append("entry.818510544", "21"); 
+    formData.append("entry.1941861272", "CONFIG_CHAVE_PIX");
+
+    fetch(formUrl, { method: "POST", mode: "no-cors", body: formData });
+    alert("Enviado com sucesso!");
+}
+
+function executarAcao() {
+    const valorInput = document.getElementById('modalInput' + currentModalId).value;
+    const valorInput2 = document.getElementById('modalInput-2' + currentModalId).value;
+    const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
+    
+    let formData = new FormData();
+    formData.append("entry.624057932", valorInput);
+    formData.append("entry.818510544", valorInput2);
+
+    if (modoSelecionado === 'editar') {
+        formData.append("entry.1941861272", "Editado");
+        if (currentType === 'image') currentTarget.src = valorInput;
+        else currentTarget.innerText = valorInput;
     }
 
-    function setMode(mode, suffix) {
-        modoSelecionado = mode;
-        const selBtn = document.getElementById('selEditar' + suffix);
-        if(mode === 'editar' && selBtn) {
-            selBtn.className = 'selector-btn active-editar';
-        }
-    }
-
-    function executarAcaoQuantidade() {
-        const valor = document.getElementById('inputQuantidade').value;
-        const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
-        
-        let formData = new FormData();
-        formData.append("entry.624057932", valor);
-        formData.append("entry.818510544", "19");
-        formData.append("entry.1941861272", "CONFIG_QUANTIDADE_NUMEROS");
-
+    if(modoSelecionado) {
         fetch(formUrl, { method: "POST", mode: "no-cors", body: formData });
-        alert("Enviado com sucesso!");
     }
+    
+    closeModal(currentModalId);
+}
 
-    function executarAcaoQuantidade2() {
-        const valor = document.getElementById('inputQuantidade2').value;
-        const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
-        
-        let formData = new FormData();
-        formData.append("entry.624057932", valor);
-        formData.append("entry.818510544", "20"); 
-        formData.append("entry.1941861272", "CONFIG_VALOR_NUMERO");
-
-        fetch(formUrl, { method: "POST", mode: "no-cors", body: formData });
-        alert("Enviado com sucesso!");
-    }
-
-    function executarAcaoQuantidade3() {
-        const valor = document.getElementById('inputQuantidade3').value;
-        const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
-        
-        let formData = new FormData();
-        formData.append("entry.624057932", valor);
-        formData.append("entry.818510544", "21"); 
-        formData.append("entry.1941861272", "CONFIG_CHAVE_PIX");
-
-        fetch(formUrl, { method: "POST", mode: "no-cors", body: formData });
-        alert("Enviado com sucesso!");
-    }
-
-    function executarAcao() {
-        const valorInput = document.getElementById('modalInput' + currentModalId).value;
-        const valorInput2 = document.getElementById('modalInput-2' + currentModalId).value;
-        const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe84Gnlx55Za57K5DscxEm-vf425KUsiTXP_A9Qb8q93TttXw/formResponse";
-        
-        let formData = new FormData();
-        formData.append("entry.624057932", valorInput);
-        formData.append("entry.818510544", valorInput2);
-
-        if (modoSelecionado === 'editar') {
-            formData.append("entry.1941861272", "Editado");
-            if (currentType === 'image') currentTarget.src = valorInput;
-            else currentTarget.innerText = valorInput;
-        }
-
-        if(modoSelecionado) {
-            fetch(formUrl, { method: "POST", mode: "no-cors", body: formData });
-        }
-        
-        closeModal(currentModalId);
-    }
-
-    function closeModal(suffix) { 
-        if(!suffix) suffix = currentModalId;
-        const modal = document.getElementById('editModal' + suffix);
-        if(modal) modal.style.display = 'none'; 
-    }
+function closeModal(suffix) { 
+    if(!suffix) suffix = currentModalId;
+    const modal = document.getElementById('editModal' + suffix);
+    if(modal) modal.style.display = 'none'; 
+}
 </script>
 
 </body>
