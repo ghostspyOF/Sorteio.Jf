@@ -617,12 +617,15 @@ async function validarAcessoPainel() {
         dadosFormulario.append('usuario', usuarioInput);
         dadosFormulario.append('senha', senhaInput);
 
-        // Envia para o seu Backend no Google
-        const resposta = await fetch(urlBackend, {
-            method: 'POST',
-            body: dadosFormulario
-        });
-
+        // Envia para o seu Backend usando o modo 'no-cors' para evitar o bloqueio do navegador
+const resposta = await fetch(urlBackend, {
+    method: 'POST',
+    mode: 'no-cors', // Evita o erro "Failed to fetch" bloqueado pelo CORS
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: dadosFormulario
+});
         // Lê a resposta final do servidor
         const resultado = await resposta.json();
 
