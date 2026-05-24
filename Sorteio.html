@@ -455,7 +455,6 @@
             cursor: pointer;
         }
 
-        /* Estilização para alinhar o modal novo com os demais */
         #bloqueio-seguranca {
             position: fixed;
             top: 0;
@@ -555,7 +554,7 @@
             </div>
         </div>
 
-        <button class="btn-sortear" id="btnOficial" onclick="executarSorteio(false)">Começar Sorteio Oficial</button>
+        <button class="btn-sortear" id="btnOficial" onclick="solicitarSenhaAdmin('sorteio')">Começar Sorteio Oficial</button>
 
         <div class="resultado-container" id="resultadoContainer">
             <div class="resultado-title" id="resultadoGeralTitulo">🎉 Número(s) Sorteado(s) 🎉</div>
@@ -633,14 +632,14 @@ onmouseup="this.style.transform='scale(1.05)'">
 </button></a>
         </div>
 
-        <button class="btn-admin" onclick="solicitarSenhaAdmin()">🛡️ Painel Admin</button>
+        <button class="btn-admin" onclick="solicitarSenhaAdmin('painel')">🛡️ Painel Admin</button>
 
     <div class="modal-admin" id="modalAvisoLista">
         <div class="modal-content card-aviso">
             <h2>⚠️ Lista de Participantes Vazia</h2>
             <p style="font-size: 0.95rem; color: #4a5568; margin-bottom: 20px; line-height: 1.5;">Por favor, cadastre a lista de participantes no Painel Admin antes de iniciar o Sorteio Oficial.</p>
             <div class="modal-botoes" style="justify-content: center; gap: 15px;">
-                <button class="btn-fechar" onclick="fecharAvisoLista()">Cancelar</button>
+                <button class="btn-fechar" onclick="cancelarAvisoLista()">Cancelar</button>
                 <button class="btn-prosseguir" onclick="prosseguirParaAdmin()">Cadastrar Lista</button>
             </div>
         </div>
@@ -714,9 +713,13 @@ onmouseup="this.style.transform='scale(1.05)'">
 
     <script>
         let bancoParticipantes = {};
+        // Nova variável para guardar o que o usuário quer fazer após digitar a senha
+        let acaoAposAutenticar = ''; 
 
-        // Abre o novo modal de segurança
-        function solicitarSenhaAdmin() {
+        // Abre o novo modal de segurança sabendo de onde veio o clique
+        function solicitarSenhaAdmin(origem) {
+            acaoAposAutenticar = origem; // Guarda se foi clicado em 'sorteio' ou 'painel'
+
             if (document.getElementById('authID')) document.getElementById('authID').value = '';
             if (document.getElementById('authSenha')) document.getElementById('authSenha').value = '';
             if (document.getElementById('erroAuth')) document.getElementById('erroAuth').style.display = 'none';
@@ -749,7 +752,13 @@ onmouseup="this.style.transform='scale(1.05)'">
                 if (resultado && resultado.autorizado === true) {
                     if (telaBloqueio) telaBloqueio.style.display = 'none';
                     if (divErro) divErro.style.display = 'none';
-                    abrirAdmin(); 
+                    
+                    // Decide o que fazer baseado no botão clicado originalmente
+                    if (acaoAposAutenticar === 'sorteio') {
+                        executarSorteio(false); // Inicia o sorteio oficial de forma segura
+                    } else {
+                        abrirAdmin(); // Abre a lista para cadastrar participantes
+                    }
                 } else {
                     if (divErro) divErro.style.display = 'block';
                     document.getElementById('authSenha').value = '';
@@ -760,7 +769,6 @@ onmouseup="this.style.transform='scale(1.05)'">
                 delete window[nomeCallback];
             };
 
-            // CORRIGIDO: Adicionado aspas simples na string de parametros abaixo
             const parametros = '?usuario=' + encodeURIComponent(usuarioInput) + '&senha=' + encodeURIComponent(senhaInput) + '&callback=' + nomeCallback;
             
             const scriptElemento = document.createElement('script');
@@ -793,7 +801,7 @@ onmouseup="this.style.transform='scale(1.05)'">
 
         function prosseguirParaAdmin() {
             fecharAvisoLista();
-            solicitarSenhaAdmin();
+            solicitarSenhaAdmin('painel');
         }
 
         function cancelarAvisoLista() {
@@ -833,7 +841,7 @@ onmouseup="this.style.transform='scale(1.05)'">
             fecharAdmin();
         }
 
-        function ejecutarSorteio(isTeste) {
+        function executarSorteio(isTeste) {
             const totalInput = document.getElementById('totalNumeros');
             const qtdInput = document.getElementById('qtdSortear');
             const btnOficial = document.getElementById('btnOficial');
