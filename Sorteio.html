@@ -847,6 +847,12 @@ onmouseup="this.style.transform='scale(1.05)'">
         }
 
         function executarSorteio(isTeste) {
+            // VERIFICAÇÃO CRÍTICA: Se for o sorteio oficial e a lista estiver vazia, barra na hora!
+            if (!isTeste && Object.keys(bancoParticipantes).length === 0) {
+                document.getElementById('modalAvisoLista').style.display = 'flex';
+                return;
+            }
+
             const totalInput = document.getElementById('totalNumeros');
             const qtdInput = document.getElementById('qtdSortear');
             const btnOficial = document.getElementById('btnOficial');
@@ -882,10 +888,6 @@ onmouseup="this.style.transform='scale(1.05)'">
                 return;
             }
 
-            if (!isTeste && Object.keys(bancoParticipantes).length === 0) {
-                document.getElementById('modalAvisoLista').style.display = 'flex';
-                return;
-            }
 
             btnOficial.disabled = true;
             btnTeste.disabled = true;
