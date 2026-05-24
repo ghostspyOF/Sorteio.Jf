@@ -627,7 +627,10 @@ const resposta = await fetch(urlBackend, {
     body: dadosFormulario
 });
         // Lê a resposta final do servidor
-        const resultado = await resposta.json();
+        //const resultado = await resposta.json();
+        // Por estas para ver a resposta real:
+        const textoResposta = await resposta.text();
+        alert("Resposta do Servidor: " + textoResposta);
 
         // Verifica se o backend deu sinal verde
         if (resultado.autorizado === true) {
