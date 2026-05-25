@@ -516,23 +516,23 @@
 <body>
     <div id="bloqueio-seguranca">
         <div class="modal-autenticacao" style="position: relative; padding-top: 40px;">
-            <a onclick="document.getElementById('bloqueio-seguranca').style.display='none'" 
-               style="position: absolute; 
-                      top: 15px; 
-                      right: 15px; 
-                      color: #dc2626; 
-                      text-decoration: none; 
-                      font-family: Arial, sans-serif; 
-                      font-size: 40px; 
-                      font-weight: bold; 
-                      line-height: 1; 
-                      cursor: pointer;
-                      transition: transform 0.2s;"
-               onmouseover="this.style.transform='scale(1.2)'" 
-               onmouseout="this.style.transform='scale(1)'"
-               title="Fechar Bloqueio para testes">
-                &times;
-            </a>
+                   <a href="index.html" 
+   style="position: absolute; 
+          top: 15px; 
+          right: 15px; /* <--- Mudado de left para right */
+          color: #dc2626; 
+          text-decoration: none; 
+          font-family: Arial, sans-serif; 
+          font-size: 40px; 
+          font-weight: bold; 
+          line-height: 1; 
+          cursor: pointer;
+          transition: transform 0.2s;"
+   onmouseover="this.style.transform='scale(1.2)'" 
+   onmouseout="this.style.transform='scale(1)'"
+   title="Voltar para o início">
+    &times;
+                   </a>
 
             <h2 style="font-size: 40px;">Área Restrita</h2>
             <p>Insira suas credenciais para gerenciar o site</p>
