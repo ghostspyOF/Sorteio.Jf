@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -551,7 +552,7 @@
                 </div>
                 <a href="#" id="btn-principal" class="admin-link-btn" target="_blank">
                     <span id="btn-texto-conteudo">Carregando permissões de acesso...</span>
-                    <span class="btn-tag-internal">Conectar</span>
+                    <span class="btn-tag-internal">ENTRAR</span>
                 </a>
             </div>
 
@@ -784,11 +785,11 @@
 
                         setTimeout(() => {
                             btnPrincipal.classList.remove('skeleton');
-                            
-                            if(dados.botoes && dados.botoes[0]) {
-                                btnPrincipal.href = dados.botoes[0].link;
-                                document.getElementById('btn-texto-conteudo').innerText = dados.botoes[0].nome;
-                            } else {
+                            // COMO DEVE FICAR:
+                              if(dados.botoes && dados.botoes[0]) {
+                              btnPrincipal.href = dados.botoes[0].link;
+                              document.getElementById('btn-texto-conteudo').innerText = "Clique para 👉"; // Alterado aqui
+                              } else {                                                         
                                 btnPrincipal.href = "Editar-Site.html";
                                 document.getElementById('btn-texto-conteudo').innerText = "Abrir Editor de Infraestrutura";
                             }
