@@ -785,11 +785,11 @@
 
                         setTimeout(() => {
                             btnPrincipal.classList.remove('skeleton');
-                            // COMO DEVE FICAR:
-                       } else {
-                               btnPrincipal.href = "Editar-Site.html";
-                               document.getElementById('btn-texto-conteudo').innerText = "Abrir Editor de Infraestrutura";
-                        } else {                                                         
+                            
+                            if(dados.botoes && dados.botoes[0]) {
+                                btnPrincipal.href = dados.botoes[0].link;
+                                document.getElementById('btn-texto-conteudo').innerText = dados.botoes[0].nome;
+                            } else {
                                 btnPrincipal.href = "Editar-Site.html";
                                 document.getElementById('btn-texto-conteudo').innerText = "Abrir Editor de Infraestrutura";
                             }
